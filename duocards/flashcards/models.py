@@ -107,8 +107,8 @@ class GenericItem(models.Model):
     #     (TABLE, 'Table')
     # ]
 
-    due_date = models.DateField(default=timezone.now())
-    # due_date = models.DateField(auto_now_add=True)
+    # due_date = models.DateField(default=timezone.now())
+    due_date = models.DateField(auto_now_add=True)
     study_stage = models.IntegerField(default=0) #used to be 1, changed it
     repeating_today = models.BooleanField(default=False)
     board = models.ForeignKey(Board, on_delete=models.CASCADE)

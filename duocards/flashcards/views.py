@@ -298,7 +298,7 @@ class CreateBoard(CreateView):
 
 class CreateCard(CreateView):
     model = FlashcardItem
-    fields = ['question', 'answer', 'due_date'] # remove due date from the form in the end
+    fields = ['question', 'answer'] #, 'due_date'] # remove due date from the form in the end
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -396,6 +396,7 @@ def edit_table(request, table_id):
                 tbl_item_id = form.cleaned_data.get('table_item_id')
                 tbl_item = TableItem.objects.get(id=tbl_item_id)
                 tbl_item.text = form.cleaned_data.get('text')
+                tbl_item.active = True
                 tbl_item.save()
         
         # add rows/columns 
