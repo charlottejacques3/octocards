@@ -1,0 +1,73 @@
+/* // <uniquifier>: Use a unique and descriptive class name
+// <weight>: Use a value from 300 to 700 */
+
+/* .comfortaa-preferences {
+  font-family: "Comfortaa", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
+} */
+
+body {
+    font-family: 'Nunito', 'Segoe UI', 'Trebuchet MS', sans-serif;
+}
+
+#fixed {
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+}
+
+.header {
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(251, 225, 229);
+    padding: 10px;
+}
+
+.header_text {
+    font-family: 'Comfortaa', 'Nunito', 'Segoe UI', sans-serif;
+    display: inline;
+    color: black;
+    text-decoration: none;
+}
+
+#logo {
+    width: 30px;
+    display: inline;
+}
+
+nav {
+    background-color:lavender;
+    position: fixed;
+    width: 190px;
+    /* top: 0px; */
+    /* left: 0px; */
+    /* height: 100%; */
+    padding: 10px;
+    margin: 10px;
+    border-style: solid; 
+    border-width: 1px;
+    border-radius: 12px;
+}
+
+#page-content {
+    padding-top: 90px;
+    padding-right: 50px;
+    margin-left: 220px;
+    /* padding: 30px; */
+}
+
+.btn-outline-primary {
+    margin: 5px;
+}
+
+#class-list {
+    margin-top: 10px;
+}
+
+h3 {
+    display: block;
+    padding-top: 35px;
+}

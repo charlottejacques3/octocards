@@ -1,0 +1,45 @@
+{% extends 'flashcards\base\base.html' %}
+
+{% block title %}Duocards{% endblock %}
+
+{% block content %}
+    <h1>Welcome, {{ user_name }}!</h1>
+    {% if cards_due %}
+        <h3>Due Today:</h3>
+        <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'study' 'due' 'all' 0 first_due_id 'home' %}'">
+            Study All Due Cards ({{ num_due }})
+        </button>
+        <ul>
+            {% for class in classes %}
+                <li>
+                    <strong><a href="{% url 'study' 'due' 'class' class.id class_first_ids|get_item:class.id 'home' %}"> 
+                        {{ class.name }} ({{ class_num_due|get_item:class.id }}):
+                    </a></strong>
+                    {% for board in boards %}
+                        {% if board.course.id == class.id %}
+                            <ul><li><a href="{% url 'study' 'due' 'board' board.id board_first_ids|get_item:board.id 'home' %}">
+                                {{ board.name }} ({{ board_num_due|get_item:board.id }})
+                            </a></li></ul>
+                        {% endif %}
+                    {% endfor %}
+                </li>
+            {% endfor %}
+            {% if due_in_no_class %}
+                <li>
+                    <strong><a href="{% url 'study' 'due' 'class' 0 class_first_ids|get_item:0 'home' %}">
+                        No Class ({{ class_num_due|get_item:0 }})
+                    </a></strong>
+                    {% for board in boards %}
+                        {% if board.course == null %}
+                            <ul><li><a href="{% url 'study' 'due' 'board' board.id board_first_ids|get_item:board.id 'home' %}">
+                                {{ board.name }} ({{ board_num_due|get_item:board.id }})
+                            </a></li></ul>
+                        {% endif %}
+                    {% endfor %}
+                </li>
+            {% endif %}
+        </ul>
+    {% else %}
+        <h3>No cards due today. Take a break, you deserve it!</h3>
+    {% endif %}
+{% endblock %}

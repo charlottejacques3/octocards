@@ -1,0 +1,22 @@
+h3 {
+    display: block;
+    padding-top: 40px;
+}
+
+.flashcard {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+    z-index: 0;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.edit-button {
+    display: inline;
+    float: right;
+}
+
+.tbl-header {
+    margin-top: 20px;
+}

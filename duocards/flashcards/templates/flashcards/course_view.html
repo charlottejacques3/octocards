@@ -1,0 +1,33 @@
+{% extends 'flashcards\base\base.html' %}
+{% load static %}
+
+{% block title %}{{ course_name }}{% endblock %}
+
+{% block static_links %}
+    <link rel="stylesheet" href="{% static 'flashcards\styles\board_view.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{{ course_name }}</h1>
+    <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'create-board' course_slug %}'">Create New Board</button>
+    {% if first_due_id > 0 %}
+        <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'study' 'due' 'class' course_id first_due_id 'page' %}'">
+            Study Due ({{ num_due }})
+        </button>
+    {% elif first_card_id > 0 %}
+        No cards due!
+    {% endif %}
+    {% if first_card_id > 0 %}
+        <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'study' 'all' 'class' course_id first_card_id 'page' %}'">
+            Study All ({{ num_total }})
+        </button>
+    {% else %}
+        No cards in this board!
+    {% endif %}
+    <h3>Boards:</h3>
+    <ul>
+        {% for board in boards %}
+            <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'board-view' board.id %}'">{{ board.name }}</button>
+        {% endfor %}
+    </ul>
+{% endblock %}

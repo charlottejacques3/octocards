@@ -1,0 +1,12 @@
+{% extends 'flashcards\base\base.html' %}
+
+{% block title %}Create Board{% endblock %}
+
+{% block content %}
+    <h1>Add New Board</h1>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-outline-primary" type="submit" value="Save">
+    </form>
+    <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'course-view' course_slug %}'">Cancel</button>
+{% endblock %}

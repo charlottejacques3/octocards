@@ -1,0 +1,72 @@
+{% extends 'flashcards\base\base.html' %}
+{% load static %}
+
+{% block title %}
+    {% if study_mode == 'all' %}
+        Study All
+    {% elif study_mode == 'due' %}
+        Study Due
+    {% endif %}
+{% endblock %}
+
+{% block static_links %}
+    <link rel="stylesheet" href="{% static 'flashcards\styles\table_styling.css' %}">
+{% endblock %}
+
+{% block content %}
+    {% if item_type == 'FlashcardItem' %}
+        <h2>{{ item.question }}</h2>
+    {% elif item_type == 'TableItem' %}
+        <h2> {{ item.table_row.table.name }} </h2>
+        <table>
+            <tr>
+                <td></td>
+                <th>{{ item.table_head.text }}</th>
+            </tr>
+            <tr>
+                <th>{{ item.table_row.header_column }}</th>
+                <td>
+                    <div class="answer" hidden>
+                        {{ item.text }}
+                    </div>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+    <div class="answer" hidden> 
+        {% if item_type == 'FlashcardItem' %}
+            {{ item.answer }} <br>
+        {% endif %}
+        {% if study_mode == 'due' %}
+            <form method="post" name="form"> {% csrf_token %}
+                <input type="hidden" name="card_id" value="{{ item.id }}">
+                <input class="btn btn-outline-primary" type="submit" name="correct_or_not" value="Correct">
+                <input class="btn btn-outline-primary" type="submit" name="correct_or_not" value="Partly Correct">
+                <input class="btn btn-outline-primary" type="submit" name="correct_or_not" value="Incorrect">
+            </form>
+        {% else %}
+            {% if next_id > 0 %}
+                <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'study' study_mode category category_id next_id start %}'">
+                    Next
+                </button>
+            {% else %}
+                Good job, you're done!
+                {% if category == 'all' %}
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'home' %}'">Finish</button>
+                {% elif category == 'class' %}
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'course-view' class_slug %}'">Finish</button>
+                {% elif category == 'board' %}
+                    <button class="btn btn-outline-primary" type="button" onclick="location.href='{% url 'board-view' category_id %}'">Finish</button>
+                {% endif%}
+            {% endif %}
+        {% endif %}
+    </div>
+    <button class="btn btn-outline-primary" type="button" onclick="revealAnswer()">Reveal Answer</button>
+    <br>
+    {% comment %} <strong> -- due: {{ item.due_date }} -- stage: {{ item.study_stage }} -- next id: {{ next_id }} 
+        -- type: {{ item_type }} -- item id: {{ item.id }}
+    </strong> {% endcomment %}
+    <br>
+
+    <script src="{% static 'flashcards/scripts/study_cards.js' %}"></script>
+{% endblock%}

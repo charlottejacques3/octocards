@@ -1,0 +1,11 @@
+#wrapper {
+    overflow: hidden;
+}
+
+table {
+    float: left;
+}
+
+#new-col {
+    overflow: hidden;
+}

@@ -1,0 +1,65 @@
+<table>
+    {% comment %} HEADER ROW {% endcomment %}
+    <tr>
+        <td></td>
+        {{ header_formset.management_form }}
+        {% for header in headers %}
+            {% if header.table == table %}
+                <th>
+                    {% if edit == False and header.text != null %}
+                        {{ header.text }}
+                    {% elif edit == True %}
+                        {% comment %} <input type="text" name="header_row" id="{{ header.id }}"> {% endcomment %}
+                        {% for form in header_formset %}
+                            {% if form.header_item_id.value == header.id %}
+                                {{ form.header_item_id.as_hidden }}
+                                {{ form.header_text.label_tag.as_hidden }}
+                                {{ form.header_text }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </th>
+            {% endif %}
+        {% endfor %}
+    </tr>
+    {% comment %} TABLE BODY {% endcomment %}
+    
+    {% for row in rows %}
+        {{ row_formset.management_form }}
+        {% if row.table == table %}
+            <tr>
+                <th>
+                    {% if edit == False and row.header_column != null %}
+                        {{ row.header_column }}
+                    {% elif edit == True %}
+                        {% for form in row_formset %}
+                            {% if form.row_id.value == row.id %}
+                                {{ form.row_id.as_hidden }}
+                                {{ form.row_header_text.label_tag.as_hidden }}
+                                {{ form.row_header_text }}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </th>
+                {{ tbl_item_formset.management_form }}
+                {% for item in table_items %}
+                    {% if item.table_row == row %}
+                        <td>
+                            {% if edit == False and item.text != null %}
+                                {{ item.text }}
+                            {% elif edit == True %}
+                                {% for form in tbl_item_formset %}
+                                    {% if form.table_item_id.value == item.id %}
+                                        {{ form.table_item_id.as_hidden }}
+                                        {{ form.text.label_tag.as_hidden }}
+                                        {{ form.text }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endif %}
+    {% endfor %}
+</table>

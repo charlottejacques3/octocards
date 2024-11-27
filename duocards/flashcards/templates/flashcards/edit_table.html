@@ -1,0 +1,25 @@
+{% extends 'flashcards\base\base.html' %}
+{% load static %}
+
+{% block title %}Edit {{ table.name }}{% endblock %}
+
+{% block static_links %}
+    <link rel="stylesheet" href="{% static 'flashcards\styles\table_styling.css' %}">
+    <link rel="stylesheet" href="{% static 'flashcards\styles\edit_table.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{{ table.name }}</h1>
+    <form method="post" id="table-form">{% csrf_token %}
+        <button class="btn btn-outline-primary" type="submit" id="save-button">Save</button>
+        <div id="wrapper">
+            {% include 'flashcards/includes/table_format.html' with table=table headers=headers rows=rows table_items=table_items edit=True tbl_item_formset=tbl_item_formset header_formset=header_formset%}
+            {{ add_row_col.as_hidden }}
+            {% comment %} add rows and columns {% endcomment %}
+            <button class="btn btn-outline-primary" type="submit" name="row_or_col" value="col" id="new-col">+</button>
+        </div>
+        <button class="btn btn-outline-primary" type="submit" name="row_or_col" value="row" id="new-row">+</button>
+    </form>
+
+    <script src="{% static 'flashcards/scripts/edit_table.js' %}"></script>
+{% endblock %}
