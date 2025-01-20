@@ -8,7 +8,7 @@ This application was coded mostly in Python's Django framework, which provided a
 
 ##Instructions
 1. Fork this repository
-2. Create and activate a virtual environment by running:<br/>
+2. Create and activate a virtual environment by running:<br/><br/>
   for Windows:
   ```
   py -m venv env
