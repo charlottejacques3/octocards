@@ -4,4 +4,15 @@ I designed a web application to help visual learners organize their study materi
 
 This application was coded mostly in Python's Django framework, which provided a way to store the user's study material in model classes connected to a SQLite database, and display it in a view. I coded the frontend in CSS, making use of the Bootstrap library.
 
-![alt text](/octocards.png)
+![Flashcards and tables for the "Sorting" topic](/octocards.png)
+
+##Instructions
+1. Fork this repository
+2. Create and activate a virtual environment by running:
+  for Windows:
+  ```
+  py -m venv env
+  .\env\Scripts\activate
+  ```
+
+4. Clone the forked repository into the folder with your virtual environment
