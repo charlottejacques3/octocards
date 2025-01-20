@@ -6,7 +6,7 @@ This application was coded mostly in Python's Django framework, which provided a
 
 ![Flashcards and tables for the "Sorting" topic](/images/octocards.png)
 
-##Instructions
+## Instructions
 1. Fork this repository
 2. Create and activate a virtual environment by running:
    
