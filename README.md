@@ -9,10 +9,14 @@ This application was coded mostly in Python's Django framework, which provided a
 ##Instructions
 1. Fork this repository
 2. Create and activate a virtual environment by running:<br/><br/>
-  for Windows:
+Windows:
   ```
   py -m venv env
   .\env\Scripts\activate
   ```
-
+macOS/Linux/Unix:
+```
+python3 -m venv env
+source env/bin/activate
+```
 4. Clone the forked repository into the folder with your virtual environment
