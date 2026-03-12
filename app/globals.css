@@ -10,6 +10,7 @@
   --button-secondary-hover: #E5E1E1;
   --button-correct: #E8FFEA;
   --button-correct-hover: #CDE4CF;
+  --font-kumbh-sans: var(--font-kumbh-sans);
 }
 
 @theme inline {
@@ -28,15 +29,36 @@
 body {
   background: var(--bg);
   color: var(--text-primary);
-  font-family: var(--font-kumb-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-kumbh-sans), Arial, Helvetica, sans-serif;
+  font-size: 14px;
 }
 
 button {
   background-color: var(--color-button-primary);
   cursor: pointer;
-  padding: 20px;
+  border-radius: 8px;
 }
 
 button :hover {
   background-color: var(--color-button-primary-hover);
+  border-radius: 8px; 
+}
+
+input {
+  /* border: 1.25px solid #000000;  */
+  border-radius: 8px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 5px;
+  margin-top: 10px; 
+  width: 100%;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 500;
+}
+
+h4 {
+  font-size: 18px;
 }

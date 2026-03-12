@@ -12,7 +12,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Protect all routes except API routes, static files, and the login page itself
-    '/((?!api|_next/static|_next/image|favicon.ico|login).*)',
+    // protect all routes except API routes, static files, and the login and signup pages themselves
+    '/((?!api|_next/static|_next/image|favicon.ico|login|signup).*)',
   ],
 };
