@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${kumbhSans.variable} antialiased`}
+        className={`${kumbhSans.variable} antialiased overflow-hidden`}
       >
         {children}
       </body>
