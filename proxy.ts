@@ -4,7 +4,6 @@ import { login, loginStatus } from "./api/auth";
 export async function proxy(request: NextRequest) {
 
 	const cookie = request.headers.get('cookie');
-	console.log(cookie);
 	const isAuthenticated = cookie ? await loginStatus(cookie) : false;
 	
 	if (!isAuthenticated) {
