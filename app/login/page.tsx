@@ -1,11 +1,12 @@
-import React from 'react'
+'use client'
 import LoginSignup from '../components/LoginSignup'
 import { AuthEnum } from '@/lib/definitions'
 import { FieldValues } from 'react-hook-form'
+import { login } from '@/api/auth'
 
 async function handleLogin(data: FieldValues) {
-  'use server'
   console.log(data);
+  login(data.username, data.password);
 }
 
 const page = () => {

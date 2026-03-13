@@ -1,7 +1,11 @@
 import { NextResponse, NextRequest } from "next/server";
+import { login, loginStatus } from "./api/auth";
 
-export function proxy(request: NextRequest) {
-	const isAuthenticated = false; //replace this with actual auth stuff
+export async function proxy(request: NextRequest) {
+
+	const cookie = request.headers.get('cookie');
+	console.log(cookie);
+	const isAuthenticated = cookie ? await loginStatus(cookie) : false;
 	
 	if (!isAuthenticated) {
 		return NextResponse.redirect(new URL("/login", request.url));

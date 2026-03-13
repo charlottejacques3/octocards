@@ -12,7 +12,7 @@ interface Props {
 
 type Inputs = {
   name: string,
-  email: string,
+  username: string,
   password: string
 }
 
@@ -33,8 +33,8 @@ const LoginSignup:React.FC<Props> = ({ type, action }) => {
             <input {...register('name', { required: true })} autoComplete='off' placeholder='First Name'/>
             {errors.name && <span className='text-red-600'>Please fill out this field</span>}
           </>}
-          <input {...register('email', { required: true, pattern: /^[A-Za-z0-9]+@[A-Za-z0-9]+.[A-Za-z0-9]+$/i})} autoComplete='off' placeholder='Email'/>
-          {errors.email && <span className='text-red-600'>Please enter a valid email</span>}
+          <input {...register('username', { required: true })} autoComplete='off' placeholder='Username'/>
+          {errors.username && <span className='text-red-600'>Please enter a valid username</span>}
           <input {...register('password', { required: true, minLength: 6 })} type='password' autoComplete='off' placeholder='Password'/>
           {errors.password && <span className='text-red-600'>Please enter a passcode of at least 6 characters in length</span>}
           <button className='w-full mt-3 mb-5' type='submit'><h4>{type}</h4></button>
