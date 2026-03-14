@@ -6,13 +6,11 @@ export async function proxy(request: NextRequest) {
 
 	const cookie = request.headers.get('cookie');
 	const isAuthenticated = cookie ? await loginStatus(cookie) : false;
-	console.log(isAuthenticated);
 	
 	if (!isAuthenticated) {
 		return NextResponse.redirect(new URL("/login", request.url));
 	} 
 	else if (request.url === `${URL_BASE}login` || request.url === `${URL_BASE}signup`) {
-		console.log('uere')
 		return NextResponse.redirect(new URL("/", request.url));
 	}
 	

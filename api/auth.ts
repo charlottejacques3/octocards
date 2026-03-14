@@ -42,3 +42,18 @@ export const loginStatus = async (cookie: string) => {
   }
   return false;
 }
+
+
+export const me = async (cookie: string) => {
+  try {
+    const res = await callAPI('login-status/', {
+      header: {'cookie': cookie}
+    });
+    const data = await res.json();
+    if (data.user) {
+      return data.user;
+    }
+  } catch (e) {
+    throw new Error('User not found');
+  }
+}

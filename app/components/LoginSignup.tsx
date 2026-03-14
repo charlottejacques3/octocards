@@ -25,7 +25,7 @@ const LoginSignup:React.FC<Props> = ({ type, action, error='' }) => {
 
   return (
     <div className='bg-bg flex flex-col justify-center h-screen sm:-translate-y-10'>
-      <div className='bg-bg-secondary lg:w-1/3 sm:w-2/3 w-full sm:h-fit h-full m-auto p-5'>
+      <div className='bg-bg-secondary lg:w-1/3 sm:w-2/3 w-full sm:h-fit h-full m-auto p-5 rounded-lg'>
         <h1 className='mb-10 w-full text-center'>octocards</h1>
         <form onSubmit={handleSubmit((data) => action(data))}>
           {error && <div className='bg-red-200 text-red-600 p-1 rounded-lg'>{error}</div>}
