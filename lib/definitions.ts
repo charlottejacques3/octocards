@@ -4,3 +4,8 @@ export enum AuthEnum {
   SIGNUP = 'Sign Up',
   LOGIN = 'Log In'
 }
+
+export type Folder = {
+  id: number,
+  name: string
+}

@@ -17,9 +17,9 @@ const SideNav = () => {
       {expanded ? 
         <div className='bg-bg-secondary m-5 p-5 w-64 rounded-lg'>
           <Image 
-            src='/back.png' width={16} height={16} alt='Menu close icon' 
+            src='/back.png' width={20} height={20} alt='Menu close icon' 
             onClick={() => setExpanded(false)}
-            className='cursor-pointer float-right'
+            className='cursor-pointer float-right w-5 h-5'
           />
           {routes.map((route) => 
             <div key={route.text} className='mb-2'>
@@ -28,9 +28,9 @@ const SideNav = () => {
           )}
         </div>
       : <Image 
-          src='menu.png' width={16} height={16} alt='Menu icon' 
+          src='menu.png' width={20} height={20} alt='Menu icon' 
           onClick={() => setExpanded(true)}
-          className='cursor-pointer m-5'
+          className='cursor-pointer m-5 w-5 h-5'
         />}
     </>
   )
