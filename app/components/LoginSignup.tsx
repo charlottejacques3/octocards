@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import Link from 'next/link'
 import { FieldValues, useForm } from 'react-hook-form'
@@ -8,6 +6,7 @@ import { AuthEnum } from '@/lib/definitions'
 interface Props {
   type: AuthEnum,
   action: (data: FieldValues) => void,
+  error?: string
 }
 
 type Inputs = {
@@ -16,7 +15,7 @@ type Inputs = {
   password: string
 }
 
-const LoginSignup:React.FC<Props> = ({ type, action }) => {
+const LoginSignup:React.FC<Props> = ({ type, action, error='' }) => {
 
   const {
     register,
@@ -29,6 +28,7 @@ const LoginSignup:React.FC<Props> = ({ type, action }) => {
       <div className='bg-bg-secondary lg:w-1/3 sm:w-2/3 w-full sm:h-fit h-full m-auto p-5'>
         <h1 className='mb-10 w-full text-center'>octocards</h1>
         <form onSubmit={handleSubmit((data) => action(data))}>
+          {error && <div className='bg-red-200 text-red-600 p-1 rounded-lg'>{error}</div>}
           {type === AuthEnum.SIGNUP && <>
             <input {...register('name', { required: true })} autoComplete='off' placeholder='First Name'/>
             {errors.name && <span className='text-red-600'>Please fill out this field</span>}

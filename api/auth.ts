@@ -7,7 +7,9 @@ export const signup = async (name: string, username: string, password: string) =
       body: JSON.stringify({first_name: name, username, password})
     });
   } catch (e) {
-    throw new Error('Failed to sign up');
+    const err = e as Error;
+    const message = err.cause === 400 ? 'The username already exists' : 'Something went wrong. Please try again';
+    throw new Error(message);
   }
 }
 
@@ -19,7 +21,9 @@ export const login = async (username: string, password: string) => {
       body: JSON.stringify({username, password})
     });
   } catch (e) {
-    throw new Error('Failed to log in');
+    const err = e as Error;
+    const message = err.cause === 400 ? 'Username or password is incorrect' : 'Something went wrong. Please try again';
+    throw new Error(message);
   }
 }
 
