@@ -3,6 +3,7 @@
 :root {
   --bg: #F7F2EC;
   --bg-secondary:  #FFFBFB;
+  --bg-secondary-hover:  #e6e3e3;
   --text-primary: #000000;
   --text-secondary: #797272;
   --button-primary: #E7AAAA;
@@ -16,6 +17,7 @@
 @theme inline {
   --color-bg: var(--bg);
   --color-bg-secondary: var(--bg-secondary);
+  --color-bg-secondary-hover: var(--bg-secondary-hover);
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-button-primary: var(--button-primary);
