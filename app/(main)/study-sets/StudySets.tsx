@@ -23,7 +23,6 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
     }
   }, [error]);
 
-
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
   return (
@@ -36,7 +35,7 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
           <FolderCard
             key={folder.id}
             folder={folder}
-            menuOpen = {menuOpenIndex == folder.id}
+            menuOpen = {menuOpenIndex === folder.id}
             setMenuOpen={(open: boolean) => open ? setMenuOpenIndex(folder.id) : setMenuOpenIndex(-1)}
           />
         )}

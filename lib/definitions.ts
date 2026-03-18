@@ -24,3 +24,11 @@ export const FolderSchema = z.object({
 });
 
 export type Folder = z.infer<typeof FolderSchema>;
+
+export const DeckSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  folder: z.number(),
+});
+
+export type Deck = z.infer<typeof DeckSchema>;

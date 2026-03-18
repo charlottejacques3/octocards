@@ -6,8 +6,17 @@ import { callAPIServer } from "./callAPIServer";
 
 
 export const getFolders = async () => {
+  const FoldersSchema = z.array(FolderSchema);
   const res = await callAPIServer('folders/');
-  return await res.json();
+  const folders = FoldersSchema.parse(await res.json());
+  return folders;
+}
+
+
+export const getFolder = async (id: number) => {
+  const res = await callAPIServer(`folders/${id}`);
+  const folder = FolderSchema.parse(await res.json());
+  return folder;
 }
 
 

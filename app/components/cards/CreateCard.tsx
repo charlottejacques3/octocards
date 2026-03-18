@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
 import { ObjectEnum, FormTypeEnum } from '@/lib/definitions'
 import { FolderUpdateCreateForm } from '../forms/FolderForms'
+import { DeckUpdateCreateForm } from '../forms/DeckForms'
 import Modal from '../Modal'
 
 interface Props {
-  objectToCreate: ObjectEnum
+  objectToCreate: ObjectEnum,
+  parentId?: number,
 }
 
-const CreateCard:React.FC<Props> = ({ objectToCreate }) => {
+const CreateCard:React.FC<Props> = ({ objectToCreate, parentId }) => {
 
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
@@ -15,6 +17,8 @@ const CreateCard:React.FC<Props> = ({ objectToCreate }) => {
     switch (objectToCreate) {
       case ObjectEnum.FOLDER: 
         return <FolderUpdateCreateForm type={FormTypeEnum.CREATE} close={() => setCreateModalOpen(false)}/>;
+      case ObjectEnum.DECK:
+        return <DeckUpdateCreateForm type={FormTypeEnum.CREATE} close={() => setCreateModalOpen(false)} folderId={parentId}/>
     }
   }
 

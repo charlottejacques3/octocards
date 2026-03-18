@@ -11,7 +11,6 @@ const page = async () => {
       </div>
     );
   } catch (e) {
-    console.log('an error');
     return <StudySets error={true}/>;
   }
 }

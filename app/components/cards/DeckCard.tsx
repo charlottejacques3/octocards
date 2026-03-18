@@ -1,16 +1,16 @@
 import React, { useState } from 'react'
 import Card from '../Card'
 import Modal from '../Modal'
-import { FolderUpdateCreateForm, FolderDeleteForm } from '../forms/FolderForms'
-import { Folder, FormTypeEnum } from '@/lib/definitions'
+import { DeckUpdateCreateForm, DeckDeleteForm } from '../forms/DeckForms'
+import { Deck, FormTypeEnum } from '@/lib/definitions'
 
 interface Props {
-  folder: Folder,
+  deck: Deck,
   menuOpen: boolean,
   setMenuOpen: (open: boolean) => void,
 }
 
-const FolderCard:React.FC<Props> = ({ folder, menuOpen, setMenuOpen }) => {
+const DeckCard:React.FC<Props> = ({ deck, menuOpen, setMenuOpen }) => {
 
   const [updateModalOpen, setUpdateModelOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModelOpen] = useState<boolean>(false);
@@ -18,25 +18,25 @@ const FolderCard:React.FC<Props> = ({ folder, menuOpen, setMenuOpen }) => {
   return (
     <>
       <Card 
-        content={folder.name} 
+        content={deck.name} 
         menuOpen={menuOpen} 
         setMenuOpen={setMenuOpen}
         setUpdateModalOpen={setUpdateModelOpen}
         setDeleteModalOpen={setDeleteModelOpen}
-        href={`folders/${folder.id}/`}
+        href={`decks/${deck.id}/`}
       />
 
       {/* update modal */}
       <Modal isOpen={updateModalOpen} close={() => setUpdateModelOpen(false)}>
-        <FolderUpdateCreateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)} id={folder.id} defaultVal={folder.name}/>
+        <DeckUpdateCreateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)} id={deck.id} defaultVal={deck.name}/>
       </Modal>
 
       {/* delete modal */}
       <Modal isOpen={deleteModalOpen} close={() => setDeleteModelOpen(false)}>
-        <FolderDeleteForm close={() => setDeleteModelOpen(false)} id={folder.id}/>
+        <DeckDeleteForm close={() => setDeleteModelOpen(false)} id={deck.id}/>
       </Modal>
     </>
   )
 }
 
-export default FolderCard
+export default DeckCard
