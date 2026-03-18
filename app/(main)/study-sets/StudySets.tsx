@@ -34,7 +34,7 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
           />
         )}
       </div>
-      <h4>Decks</h4>
+      <h4>Uncategorized Decks</h4>
     </div>
   )
 }
