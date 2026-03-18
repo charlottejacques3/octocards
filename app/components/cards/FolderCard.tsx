@@ -2,15 +2,15 @@ import React, { useState } from 'react'
 import Card from '../Card'
 import Modal from '../Modal'
 import { FolderUpdateForm } from '../forms/FolderForm'
-import { FormTypeEnum } from '@/lib/definitions'
+import { Folder, FormTypeEnum } from '@/lib/definitions'
 
 interface Props {
-  content: string,
+  folder: Folder,
   menuOpen: boolean,
   setMenuOpen: (open: boolean) => void,
 }
 
-const FolderCard:React.FC<Props> = ({ content, menuOpen, setMenuOpen }) => {
+const FolderCard:React.FC<Props> = ({ folder, menuOpen, setMenuOpen }) => {
 
   const [updateModalOpen, setUpdateModelOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModelOpen] = useState<boolean>(false);
@@ -18,7 +18,7 @@ const FolderCard:React.FC<Props> = ({ content, menuOpen, setMenuOpen }) => {
   return (
     <>
       <Card 
-        content={content} 
+        content={folder.name} 
         menuOpen={menuOpen} 
         setMenuOpen={setMenuOpen}
         setUpdateModalOpen={setUpdateModelOpen}
@@ -27,8 +27,10 @@ const FolderCard:React.FC<Props> = ({ content, menuOpen, setMenuOpen }) => {
 
       {/* update modal */}
       <Modal isOpen={updateModalOpen} close={() => setUpdateModelOpen(false)}>
-        <FolderUpdateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)}/>
+        <FolderUpdateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)} id={folder.id}/>
       </Modal>
+
+      {/* delete modal */}
     </>
   )
 }

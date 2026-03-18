@@ -4,9 +4,8 @@ import { getFolders } from '@/api/folders'
 import StudySets from './StudySets';
 
 const page = async () => {
-  const cookieHeader = (await cookies()).toString();
   try {
-    const folders:Folder[] = await getFolders(cookieHeader);
+    const folders:Folder[] = await getFolders();
     return (
       <div className='w-full'>
         <StudySets folders={folders}/>

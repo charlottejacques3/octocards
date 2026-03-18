@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 import { Folder } from '@/lib/definitions'
 import Card from '@/app/components/Card'
 import FolderCard from '@/app/components/cards/FolderCard'
-// import FolderForm from '@/app/components/forms/FolderForm'
 
 interface Props {
   folders?: Folder[]
@@ -21,13 +20,6 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
 
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
-  const folderDeleteConfirmation = (
-    <div>
-      Are you sure you would like to delete this folder? This will delete all decks and cards contained in this folder. This action cannot be undone.
-
-    </div>
-  );
-
   return (
     <div className='w-full h-screen' onClick={() => setMenuOpenIndex(-1)}>
       <h1>Study Sets</h1>
@@ -36,7 +28,7 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
         {folders && folders.map((folder) =>
           <FolderCard
             key={folder.id}
-            content={folder.name}
+            folder={folder}
             menuOpen = {menuOpenIndex == folder.id}
             setMenuOpen={(open: boolean) => open ? setMenuOpenIndex(folder.id) : setMenuOpenIndex(-1)}
           />

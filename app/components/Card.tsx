@@ -39,8 +39,8 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
 
       {/* dropdown menu */}
       <div className={`z-10 shadow-xl absolute left-60 rounded-lg top-3 bg-bg-secondary border border-text-secondary ${!menuOpen && 'hidden'}`}>
-        <div className={`${menuItemStyles} border-b border-b-text-secondary`} onClick={() => setUpdateModalOpen(true)}>Edit</div>
-        <div className={menuItemStyles}>Delete</div>
+        <div className={`${menuItemStyles} border-b border-b-text-secondary`} onClick={() => {setUpdateModalOpen(true); setMenuOpen(false)}}>Edit</div>
+        <div className={menuItemStyles} onClick={() => {setDeleteModalOpen(true); setMenuOpen(false)}}>Delete</div>
       </div>
 
       {/* card content */}
