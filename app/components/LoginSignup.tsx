@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { FieldValues, useForm } from 'react-hook-form'
 import { AuthEnum } from '@/lib/definitions'
+import Button from './Button'
 
 interface Props {
   type: AuthEnum,
@@ -37,7 +38,7 @@ const LoginSignup:React.FC<Props> = ({ type, action, error='' }) => {
           {errors.username && <span className='text-red-600'>Please enter a valid username</span>}
           <input {...register('password', { required: true, minLength: 6 })} type='password' autoComplete='off' placeholder='Password'/>
           {errors.password && <span className='text-red-600'>Please enter a passcode of at least 6 characters in length</span>}
-          <button className='w-full mt-3 mb-5' type='submit'><h4>{type}</h4></button>
+          <Button className='w-full mt-3 mb-5' type='submit'><h4>{type}</h4></Button>
         </form>
         <p className='text-xs'>
           {type === AuthEnum.LOGIN ?

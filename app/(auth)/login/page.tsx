@@ -1,5 +1,5 @@
 'use client'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import LoginSignup from '../../components/LoginSignup'
 import { AuthEnum } from '@/lib/definitions'

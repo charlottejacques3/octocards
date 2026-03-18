@@ -1,23 +1,25 @@
 'use client'
-import React, { ReactElement, useState, useEffect } from 'react'
+import React, { useState, useEffect, ReactNode } from 'react'
 import Image from 'next/image'
+import Modal from './Modal'
 
 interface Props {
   content: string,
   menuOpen: boolean,
   setMenuOpen: (open: boolean) => void,
-  onConfirmDelete: () => void,
-  confirmDeleteMsg: string,
-  updateFormContent: ReactElement,
-  updateHeader: string,
+  setUpdateModalOpen: (open: boolean) => void,
+  setDeleteModalOpen: (open: boolean) => void,
   short?: boolean,
   otherSide?: string,
   href?: string,
 }
 
-const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, onConfirmDelete, confirmDeleteMsg, updateFormContent, updateHeader, short=true, otherSide, href }) => {
+const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOpen, setDeleteModalOpen, short=true, otherSide, href }) => {
 
   const [menuIconVisible, setMenuIconVisible] = useState<boolean>(false);
+  // const [updateModalOpen, setUpdateModelOpen] = useState<boolean>(false);
+  // const [deleteModalOpen, setDeleteModelOpen] = useState<boolean>(false);
+
   const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover';
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, onConfirmDelete,
 
       {/* dropdown menu */}
       <div className={`z-10 shadow-xl absolute left-60 rounded-lg top-3 bg-bg-secondary border border-text-secondary ${!menuOpen && 'hidden'}`}>
-        <div className={`${menuItemStyles} border-b border-b-text-secondary`}>Update</div>
+        <div className={`${menuItemStyles} border-b border-b-text-secondary`} onClick={() => setUpdateModalOpen(true)}>Edit</div>
         <div className={menuItemStyles}>Delete</div>
       </div>
 
@@ -48,9 +50,13 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, onConfirmDelete,
           className={`cursor-pointer float-right w-3 h-3 ${!menuIconVisible && 'hidden'}`}
           onClick={() => setMenuOpen(!menuOpen)}
         />
-        <h4>{content}</h4>
+        <div className='h-full w-full bg-'>
+          <h4>{content}</h4>
+        </div>
       </div>
     </div>
+
+    
     </>
   )
 }

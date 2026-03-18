@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { Folder } from '@/lib/definitions'
 import Card from '@/app/components/Card'
+import FolderCard from '@/app/components/cards/FolderCard'
+// import FolderForm from '@/app/components/forms/FolderForm'
 
 interface Props {
   folders?: Folder[]
@@ -19,8 +21,11 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
 
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
-  const folderUpdateForm = (
-    <form>update</form>
+  const folderDeleteConfirmation = (
+    <div>
+      Are you sure you would like to delete this folder? This will delete all decks and cards contained in this folder. This action cannot be undone.
+
+    </div>
   );
 
   return (
@@ -29,16 +34,11 @@ const StudySets:React.FC<Props> = ({ folders, error }) => {
       <h4>Folders</h4>
       <div className='flex'>
         {folders && folders.map((folder) =>
-          <Card
+          <FolderCard
             key={folder.id}
             content={folder.name}
             menuOpen = {menuOpenIndex == folder.id}
             setMenuOpen={(open: boolean) => open ? setMenuOpenIndex(folder.id) : setMenuOpenIndex(-1)}
-            onConfirmDelete={() => {}}
-            confirmDeleteMsg='Are you sure you would like to delete this folder? This will delete all decks and cards contained in this folder. This action cannot be undone.'
-            updateFormContent={folderUpdateForm}
-            updateHeader='Update Folder'
-            href=''
           />
         )}
       </div>

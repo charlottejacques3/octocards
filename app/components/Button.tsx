@@ -1,13 +1,23 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
+
+type ButtonType = 'button' | 'submit' | 'reset';
 
 interface Props {
-  onClick: () => void,
-  text: string
+  children: ReactNode,
+  onClick?: () => void,
+  className?: string
+  type?: ButtonType
 }
 
-const Button:React.FC<Props> = ({ onClick, text }) => {
+const Button:React.FC<Props> = ({ children, onClick, className='', type='button' }) => {
   return (
-    <button onClick={() => onClick()}>{text}</button>
+    <button 
+      className={`${className} bg-button-primary cursor-pointer rounded-lg hover:bg-button-primary-hover p-1`} 
+      type={type} 
+      onClick={onClick ? () => onClick() : () => {}}
+    >
+      {children}
+    </button>
   )
 }
 

@@ -5,6 +5,11 @@ export enum AuthEnum {
   LOGIN = 'Log In'
 }
 
+export enum FormTypeEnum {
+  CREATE = 'Create',
+  EDIT = 'Edit'
+}
+
 export type Folder = {
   id: number,
   name: string
