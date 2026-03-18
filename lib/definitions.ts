@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 export const URL_BASE = 'http://localhost:3000/'
 
 export enum AuthEnum {
@@ -10,7 +12,15 @@ export enum FormTypeEnum {
   EDIT = 'Edit'
 }
 
-export type Folder = {
-  id: number,
-  name: string
+export enum ObjectEnum {
+  FOLDER = 'Folder',
+  DECK = 'Deck',
+  CARD = 'Card'
 }
+
+export const FolderSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+
+export type Folder = z.infer<typeof FolderSchema>;

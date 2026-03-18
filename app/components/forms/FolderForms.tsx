@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form'
-import { FormTypeEnum } from '@/lib/definitions';
-import { updateFolder, deleteFolder } from '@/api/folders';
-import Button from '../Button';
 import { toast } from 'sonner';
+import { FormTypeEnum } from '@/lib/definitions';
+import { createFolder, updateFolder, deleteFolder } from '@/api/folders';
+import Button from '../Button';
 
-interface FolderUpdateProps {
+interface FolderUpdateCreateProps {
   type: FormTypeEnum,
   close: () => void,
   id?: number,
-  defaultVal: string
+  defaultVal?: string
 }
 
-export const FolderUpdateForm:React.FC<FolderUpdateProps> = ({ type, close, id, defaultVal }) => {
+export const FolderUpdateCreateForm:React.FC<FolderUpdateCreateProps> = ({ type, close, id, defaultVal='' }) => {
 
   const {
     register,
@@ -27,17 +27,24 @@ export const FolderUpdateForm:React.FC<FolderUpdateProps> = ({ type, close, id, 
     setFocus('newName')
   }, [close])
 
-  const handleFormSubmit = (data: FieldValues) => {
-    if (id) {
+  const handleFormSubmit = async (data: FieldValues) => {
+    if (type === FormTypeEnum.CREATE) {
       try {
-        updateFolder(id, data.newName);
+        createFolder(data.newName);
       } catch (e) {
-        toast.error('Failed to update folder. Please try again')
+        toast.error('Failed to update folder. Please try again');
+      }
+    }
+    else if (id) {
+      try {
+        await updateFolder(id, data.newName);
+      } catch (e) {
+        toast.error('Failed to update folder. Please try again');
       }
     } else {
       toast.error('Error: missing folder ID');
     }
-    close();
+    onClose();
   }
 
   const onClose = () => {
@@ -48,13 +55,13 @@ export const FolderUpdateForm:React.FC<FolderUpdateProps> = ({ type, close, id, 
 
   return (
     <div>
-      <h4>Edit Folder</h4>
+      <h4>{type==FormTypeEnum.EDIT ? 'Edit' : 'Add'} Folder</h4>
       <form onSubmit={handleSubmit((data) => handleFormSubmit(data))}>
         <input {...register('newName', { required: true })} autoComplete='off' placeholder='New folder name' defaultValue={defaultVal}/>
         {errors.newName && <div className='text-red-600'>Please fill out this field</div>}
         <div className='flex mt-3'>
           <Button onClick={onClose} priority='secondary' className='w-full mr-1'>Cancel</Button>
-          <Button type='submit' className='w-full ml-1'>Update</Button>
+          <Button type='submit' className='w-full ml-1'>{type==FormTypeEnum.EDIT ? 'Update' : 'Create'}</Button>
         </div>
       </form>
     </div>

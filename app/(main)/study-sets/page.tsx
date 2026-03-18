@@ -1,4 +1,3 @@
-import { cookies } from 'next/headers'
 import { Folder } from '@/lib/definitions';
 import { getFolders } from '@/api/folders'
 import StudySets from './StudySets';
@@ -8,11 +7,12 @@ const page = async () => {
     const folders:Folder[] = await getFolders();
     return (
       <div className='w-full'>
-        <StudySets folders={folders}/>
+        <StudySets folders={folders} error={false}/>
       </div>
     );
   } catch (e) {
-    return <StudySets error/>;
+    console.log('an error');
+    return <StudySets error={true}/>;
   }
 }
 

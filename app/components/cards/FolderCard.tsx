@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Card from '../Card'
 import Modal from '../Modal'
-import { FolderUpdateForm, FolderDeleteForm } from '../forms/FolderForm'
+import { FolderUpdateCreateForm, FolderDeleteForm } from '../forms/FolderForms'
 import { Folder, FormTypeEnum } from '@/lib/definitions'
 
 interface Props {
@@ -27,7 +27,7 @@ const FolderCard:React.FC<Props> = ({ folder, menuOpen, setMenuOpen }) => {
 
       {/* update modal */}
       <Modal isOpen={updateModalOpen} close={() => setUpdateModelOpen(false)}>
-        <FolderUpdateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)} id={folder.id} defaultVal={folder.name}/>
+        <FolderUpdateCreateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)} id={folder.id} defaultVal={folder.name}/>
       </Modal>
 
       {/* delete modal */}

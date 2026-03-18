@@ -1,7 +1,6 @@
 'use client'
-import React, { useState, useEffect, ReactNode } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import Modal from './Modal'
 
 interface Props {
   content: string,
@@ -17,8 +16,6 @@ interface Props {
 const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOpen, setDeleteModalOpen, short=true, otherSide, href }) => {
 
   const [menuIconVisible, setMenuIconVisible] = useState<boolean>(false);
-  // const [updateModalOpen, setUpdateModelOpen] = useState<boolean>(false);
-  // const [deleteModalOpen, setDeleteModelOpen] = useState<boolean>(false);
 
   const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover';
 
