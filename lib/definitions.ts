@@ -32,3 +32,19 @@ export const DeckSchema = z.object({
 });
 
 export type Deck = z.infer<typeof DeckSchema>;
+
+export const CardSchema = z.object({
+  id: z.number(),
+  question: z.string(),
+  answer: z.string(),
+  dueDate: z.date(),
+  easinessFactor: z.number(),
+  currentInterval: z.number(),
+  repNumber: z.number(),
+  deck: z.number(),
+});
+
+export const CardOverviewSchema = CardSchema.omit({ dueDate: true, easinessFactor: true, currentInterval: true, repNumber: true })
+
+export type Card = z.infer<typeof CardSchema>;
+export type CardOverview = z.infer<typeof CardOverviewSchema>;

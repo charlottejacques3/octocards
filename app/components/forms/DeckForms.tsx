@@ -26,7 +26,11 @@ export const DeckUpdateCreateForm:React.FC<DeckUpdateCreateProps> = ({ type, clo
 
   useEffect(() => {
     setFocus('newName')
-  }, [close])
+  }, [close]);
+
+  useEffect(() => {
+    reset({ newName: defaultVal });
+  }, [defaultVal, reset]);
 
   const handleFormSubmit = async (data: FieldValues) => {
     if (type === FormTypeEnum.CREATE && folderId) {

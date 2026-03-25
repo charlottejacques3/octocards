@@ -25,7 +25,11 @@ export const FolderUpdateCreateForm:React.FC<FolderUpdateCreateProps> = ({ type,
 
   useEffect(() => {
     setFocus('newName')
-  }, [close])
+  }, [close]);
+  
+  useEffect(() => {
+    reset({ newName: defaultVal });
+  }, [defaultVal, reset]);
 
   const handleFormSubmit = async (data: FieldValues) => {
     if (type === FormTypeEnum.CREATE) {

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { ObjectEnum, FormTypeEnum } from '@/lib/definitions'
 import { FolderUpdateCreateForm } from '../forms/FolderForms'
 import { DeckUpdateCreateForm } from '../forms/DeckForms'
+import { CardUpdateCreateForm } from '../forms/CardForms'
 import Modal from '../Modal'
 
 interface Props {
@@ -19,6 +20,10 @@ const CreateCard:React.FC<Props> = ({ objectToCreate, parentId }) => {
         return <FolderUpdateCreateForm type={FormTypeEnum.CREATE} close={() => setCreateModalOpen(false)}/>;
       case ObjectEnum.DECK:
         return <DeckUpdateCreateForm type={FormTypeEnum.CREATE} close={() => setCreateModalOpen(false)} folderId={parentId}/>
+      case ObjectEnum.CARD:
+        return <CardUpdateCreateForm type={FormTypeEnum.CREATE} close={() => setCreateModalOpen(false)} deckId={parentId}/>
+      default:
+        return <p>Error, please refresh the page</p>
     }
   }
 

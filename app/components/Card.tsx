@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useEffectEvent } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
@@ -9,17 +9,22 @@ interface Props {
   setMenuOpen: (open: boolean) => void,
   setUpdateModalOpen: (open: boolean) => void,
   setDeleteModalOpen: (open: boolean) => void,
-  short?: boolean,
+  flashcard?: boolean,
   otherSide?: string,
   href?: string,
 }
 
-const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOpen, setDeleteModalOpen, short=true, otherSide, href }) => {
+const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOpen, setDeleteModalOpen, flashcard=false, otherSide, href }) => {
 
   const router = useRouter();
   const [menuIconVisible, setMenuIconVisible] = useState<boolean>(false);
+  const [cardContent, setCardContent] = useState<string>(content);
 
   const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover';
+
+  useEffect(() => {
+    setCardContent(content);
+  }, [content]);
 
   useEffect(() => {
     if (!menuOpen) {
@@ -30,14 +35,20 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
   const onClickCard = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     if (href) {
-      router.push(href);
+      router.push(`../${href}`);
+    } else if (otherSide) {
+      if (cardContent === content) {
+        setCardContent(otherSide);
+      } else {
+        setCardContent(content);
+      }
     }
   }
 
   return (
     <>
     <div 
-      className='bg-bg-secondary rounded-lg mr-4 mt-2 w-64 relative cursor-pointer' 
+      className={`bg-bg-secondary rounded-lg mr-4 mt-2 w-64 relative cursor-pointer ${flashcard ? 'h-30 text-base text-center px-2' : 'text-lg p-5'}`} 
       onMouseEnter={() => setMenuIconVisible(true)}
       onMouseLeave={() => !menuOpen && setMenuIconVisible(false)}
       onClick={onClickCard}
@@ -53,14 +64,14 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
       </div>
 
       {/* card content */}
-      <div className='m-5'>
+      <div className='h-full overflow-y-auto'>
         <Image
           src='/three_dots.png' height={12} width={12} alt='Three dots menu icon'
-          className={`cursor-pointer float-right w-3 h-3 ${!menuIconVisible && 'hidden'}`}
+          className={`cursor-pointer absolute right-5 w-3 h-3 ${!menuIconVisible && 'hidden'}`}
           onClick={(e) => {e.stopPropagation(); setMenuOpen(!menuOpen)}}
         />
-        <div className='h-full w-full bg-'>
-          <h4>{content}</h4>
+        <div className='h-full w-full flex justify-center items-center wrap-break-word'>
+          {cardContent}
         </div>
       </div>
     </div>
