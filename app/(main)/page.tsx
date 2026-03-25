@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers'
 import { me } from '@/api/auth'
+import Homepage from './Homepage';
 
 export default async function Home() {
 
@@ -11,9 +12,14 @@ export default async function Home() {
     user = '';
   }
 
-  return (
-    <>
-      {user ? `Hello, ${user}!` : 'Welcome back!'}
-    </>
-  );
+  try {
+    //fetch data
+    return (
+      <Homepage username={user}/>
+    );
+  } catch {
+    return (
+      <Homepage username={user} error/>
+    );
+  }
 }

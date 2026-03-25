@@ -2,6 +2,7 @@ import { Deck, CardOverview } from "@/lib/definitions";
 import { getDeck } from "@/api/decks";
 import { getCardOverviews } from "@/api/cards";
 import DeckPage from "./DeckPage";
+import NotFound from "@/app/components/NotFound";
 
 const page = async ({ params } : { params: Promise<{id: number}> }) => {
 
@@ -11,11 +12,11 @@ const page = async ({ params } : { params: Promise<{id: number}> }) => {
     const cards:CardOverview[] = await getCardOverviews(deckId);
     return (
       <div className='w-full'>
-        <DeckPage deck={deck} cards={cards} error={false}/>
+        <DeckPage deck={deck} cards={cards}/>
       </div>
     );
   } catch (e) {
-    return <DeckPage error={true}/>;
+    return <NotFound message='Error loading data, please try again'/>;
   }
 }
 
