@@ -1,6 +1,9 @@
 import { cookies } from 'next/headers'
+import { DueCount } from '@/lib/definitions';
 import { me } from '@/api/auth'
+import { getCardCounts, getAllFolderDueCounts } from '@/api/counts';
 import Homepage from './Homepage';
+import NotFound from '../components/NotFound';
 
 export default async function Home() {
 
@@ -13,13 +16,15 @@ export default async function Home() {
   }
 
   try {
-    //fetch data
+    const totalCount:number = await getCardCounts(true);
+    const folderDueCounts:DueCount[] = await getAllFolderDueCounts();
     return (
-      <Homepage username={user}/>
+      <Homepage username={user} totalCount={totalCount} folderDueCounts={folderDueCounts}/>
     );
-  } catch {
+  } catch (e) {
+    console.log(e);
     return (
-      <Homepage username={user} error/>
+      <NotFound/>
     );
   }
 }

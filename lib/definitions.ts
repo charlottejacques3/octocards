@@ -48,3 +48,9 @@ export const CardOverviewSchema = CardSchema.omit({ dueDate: true, easinessFacto
 
 export type Card = z.infer<typeof CardSchema>;
 export type CardOverview = z.infer<typeof CardOverviewSchema>;
+
+export type DueCount = {
+  id: number,
+  name: string,
+  card_count: number
+}

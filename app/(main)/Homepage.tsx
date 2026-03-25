@@ -1,29 +1,21 @@
 'use client'
-import React, { useEffect, useRef } from 'react'
-import { toast } from 'sonner'
+import React, { useState } from 'react'
+import { DueCount } from '@/lib/definitions'
+import StudySection from './StudySection'
 
 interface Props {
-  username: string,
-  error?: boolean
+  username: string
+  totalCount: number
+  folderDueCounts: DueCount[]
 }
 
-const Homepage:React.FC<Props> = ({ username, error }) => {
-
-  const toastShownRef = useRef(false);
-
-  useEffect(() => {
-    if (error && !toastShownRef.current) {
-      toast.error('Failed to load data');
-      toastShownRef.current = true;
-    } else if (!error) {
-      toastShownRef.current = false;
-    }
-  }, [error]);
+const Homepage:React.FC<Props> = ({ username, totalCount, folderDueCounts }) => {
 
   return (
     <div className='w-full h-screen'>
       <h1>{username ? `Hello, ${username}!` : 'Welcome back!'}</h1> 
-      <h4>You have </h4>
+      <h4>You have {totalCount} cards to study today.</h4>
+      {folderDueCounts.map((folder) => <StudySection key={folder.id} element={folder} isFolder/>)}
     </div>
   )
 }
