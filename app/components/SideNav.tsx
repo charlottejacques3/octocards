@@ -15,7 +15,7 @@ const SideNav = () => {
   return (
     <>
       {expanded ? 
-        <div className='bg-bg-secondary m-5 p-5 w-64 rounded-lg'>
+        <div className='bg-bg-secondary m-5 p-5 w-64 rounded-lg h-fit'>
           <Image 
             src='/back.png' width={20} height={20} alt='Menu close icon' 
             onClick={() => setExpanded(false)}

@@ -27,7 +27,7 @@ const FolderPage:React.FC<Props> = ({ folder, decks, error }) => {
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
   return (
-    <div className='w-full h-full'>
+    <div className='w-full h-screen' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{folder ? folder.name : 'Folder not found'}</h1>
       <h4>Decks</h4>
       <div className='flex flex-wrap'>

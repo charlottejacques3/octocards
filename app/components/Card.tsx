@@ -48,7 +48,7 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
   return (
     <>
     <div 
-      className={`bg-bg-secondary rounded-lg mr-4 mt-2 w-64 relative cursor-pointer ${flashcard ? 'h-30 text-base text-center px-2' : 'text-lg p-5'}`} 
+      className={`bg-bg-secondary rounded-lg mr-4 mt-2 w-64 relative cursor-pointer ${flashcard ? 'h-30 px-2' : 'p-5'}`} 
       onMouseEnter={() => setMenuIconVisible(true)}
       onMouseLeave={() => !menuOpen && setMenuIconVisible(false)}
       onClick={onClickCard}
@@ -67,10 +67,10 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
       <div className='h-full overflow-y-auto'>
         <Image
           src='/three_dots.png' height={12} width={12} alt='Three dots menu icon'
-          className={`cursor-pointer absolute right-5 w-3 h-3 ${!menuIconVisible && 'hidden'}`}
+          className={`cursor-pointer absolute right-5 top-5 w-3 h-3 ${!menuIconVisible && 'hidden'}`}
           onClick={(e) => {e.stopPropagation(); setMenuOpen(!menuOpen)}}
         />
-        <div className='h-full w-full flex justify-center items-center wrap-break-word'>
+        <div className={`h-full w-full flex items-center wrap-break-word ${flashcard ? 'text-base justify-center' : 'text-lg'}`}>
           {cardContent}
         </div>
       </div>

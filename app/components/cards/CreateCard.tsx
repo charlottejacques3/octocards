@@ -29,8 +29,8 @@ const CreateCard:React.FC<Props> = ({ objectToCreate, parentId }) => {
 
   return (
     <>
-      <div className='bg-bg-secondary rounded-lg mr-4 mt-2 w-64 cursor-pointer hover:bg-bg-secondary-hover' onClick={() => setCreateModalOpen(true)}>
-        <h1 className='text-center'>+</h1>
+      <div className='flex justify-center items-center bg-bg-secondary rounded-lg mr-4 mt-2 w-64 cursor-pointer hover:bg-bg-secondary-hover' onClick={() => setCreateModalOpen(true)}>
+        <h1>+</h1>
       </div>
 
       {/* create modal */}
