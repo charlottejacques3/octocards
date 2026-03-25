@@ -13,6 +13,16 @@ export const getCardOverviews = async (deckId: number) => {
 }
 
 
+export const getCardsToStudy = async (due: boolean, category?: string, categoryId?: number) => {
+  const url = `cards/to-study/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`;
+  const CardsSchema = z.array(CardOverviewSchema);
+  const res = await callAPIServer(url);
+  const cards = CardsSchema.parse(await res.json());
+  console.log(cards);
+  return cards;
+}
+
+
 // export const getDeck = async (id: number) => {
 //   const res = await callAPIServer(`decks/${id}`);
 //   const folder = DeckSchema.parse(await res.json());

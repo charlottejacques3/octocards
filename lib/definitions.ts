@@ -37,14 +37,14 @@ export const CardSchema = z.object({
   id: z.number(),
   question: z.string(),
   answer: z.string(),
-  dueDate: z.date(),
-  easinessFactor: z.number(),
-  currentInterval: z.number(),
-  repNumber: z.number(),
+  due_date: z.date(),
+  easiness_factor: z.number(),
+  current_interval: z.number(),
+  rep_number: z.number(),
   deck: z.number(),
 });
 
-export const CardOverviewSchema = CardSchema.omit({ dueDate: true, easinessFactor: true, currentInterval: true, repNumber: true })
+export const CardOverviewSchema = CardSchema.omit({ due_date: true, easiness_factor: true, current_interval: true, rep_number: true })
 
 export type Card = z.infer<typeof CardSchema>;
 export type CardOverview = z.infer<typeof CardOverviewSchema>;

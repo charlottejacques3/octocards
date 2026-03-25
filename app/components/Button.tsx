@@ -1,29 +1,40 @@
 import React, { ReactNode } from 'react'
+import Link from 'next/link';
 
 type ButtonType = 'button' | 'submit' | 'reset';
-type ButtonPriority = 'primary' | 'secondary' | 'underline';
+type ButtonPriority = 'primary' | 'secondary' | 'underline' | 'correct';
 
 interface Props {
   children: ReactNode,
   onClick?: () => void,
   className?: string
   type?: ButtonType,
-  priority?: ButtonPriority
+  priority?: ButtonPriority,
+  href?: string,
 }
 
-const Button:React.FC<Props> = ({ children, onClick, className='', type='button', priority='primary' }) => {
+const Button:React.FC<Props> = ({ children, onClick, className='', type='button', priority='primary', href }) => {
+
+  const classes = `
+    ${className} cursor-pointer rounded-lg p-1
+    ${priority === 'primary' && 'bg-button-primary hover:bg-button-primary-hover'}
+    ${priority === 'correct' && 'bg-button-correct hover:bg-button-correct-hover'}
+    ${priority === 'secondary' && 'bg-bg-secondary hover:bg-bg-secondary-hover border border-button-primary'}
+  `;
+
   return (
-    <button 
-      className={`
-        ${className} cursor-pointer rounded-lg p-1
-        ${priority === 'primary' && 'bg-button-primary hover:bg-button-primary-hover'}
-        ${priority === 'secondary' && 'bg-bg-secondary hover:bg-bg-secondary-hover border border-button-primary'}
-      `} 
-      type={type} 
-      onClick={onClick ? () => onClick() : () => {}}
-    >
-      {children}
-    </button>
+    <>
+      {href ? 
+        <Link href={href} className={classes}>{children}</Link>
+        : <button 
+          className={classes} 
+          type={type} 
+          onClick={onClick ? () => onClick() : () => {}}
+        >
+          {children}
+        </button>
+      }
+    </>
   )
 }
 
