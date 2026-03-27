@@ -11,6 +11,8 @@
   --button-secondary-hover: #E5E1E1;
   --button-correct: #E8FFEA;
   --button-correct-hover: #CDE4CF;
+  --button-partially-correct: #FFDABA;
+  --button-partially-correct-hover: #E6C7AD;
   --font-kumbh-sans: var(--font-kumbh-sans);
 }
 
@@ -25,6 +27,8 @@
   --color-button-secondary-hover: var(--button-secondary-hover);
   --color-button-correct: var(--button-correct);
   --color-button-correct-hover: var(--button-correct-hover);
+  --color-button-partially-correct: var(--button-partially-correct);
+  --color-button-partially-correct-hover: var(--button-partially-correct-hover);
   --font-sans: var(--font-kumbh-sans);
 }
 

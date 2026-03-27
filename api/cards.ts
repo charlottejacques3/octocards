@@ -17,9 +17,7 @@ export const getCardsToStudy = async (due: boolean, category?: string, categoryI
   const url = `cards/to-study/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`;
   const CardsSchema = z.array(CardOverviewSchema);
   const res = await callAPIServer(url);
-  const cards = CardsSchema.parse(await res.json());
-  console.log(cards);
-  return cards;
+  return CardsSchema.parse(await res.json());
 }
 
 
@@ -65,4 +63,11 @@ export const deleteCard = async (id: number) => {
     method: 'DELETE',
   });
   revalidatePath('/');
+}
+
+
+export const studyCard = async (id: number, response: string, lastCard: boolean) => {
+  await callAPIServer(`cards/${id}/study-card/${response}/`, {
+    method: 'PATCH',
+  });
 }

@@ -17,7 +17,6 @@ const page = async ({ searchParams } : { searchParams: Promise<{ [key: string]: 
     category = 'deck';
     categoryId = Number(params.deck);
   }
-  console.log('params', params, due, category, categoryId);
 
   try {
     const cards:CardOverview[] = await getCardsToStudy(due, category, categoryId);
