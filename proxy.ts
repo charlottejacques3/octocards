@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { loginStatus } from "./api/auth";
+import { loginStatus } from "./app/api/auth";
 import { URL_BASE } from "./lib/definitions";
 
 export async function proxy(request: NextRequest) {

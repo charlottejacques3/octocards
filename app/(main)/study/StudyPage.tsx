@@ -1,42 +1,55 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { CardOverview } from '@/lib/definitions'
-import { callAPI } from '@/api/helpers'
-import { studyCard } from '@/api/cards'
+import { Card, CardOverview } from '@/lib/definitions'
+import { studyCard } from '@/app/api/cards'
 import Button from '@/app/components/Button'
 
 interface Props {
   cards: CardOverview[],
   due: boolean,
+  category?: string,
+  categoryId?: number
 }
 
-const StudyPage:React.FC<Props> = ({ cards, due }) => {
+const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
 
-  const router = useRouter();
+  const [cardsToStudy, setCardsToStudy] = useState<CardOverview[]>([]);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(-1);
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
-  const activeCard:CardOverview = cards[activeCardIndex];
+  const [activeCard, setActiveCard] = useState<CardOverview|undefined>(undefined);
 
   useEffect(() => {
-    if (cards.length > 0) {
-      setActiveCardIndex(0);
-    }
+    setCardsToStudy(cards);
   }, []);
+
+  useEffect(() => {
+    if (cardsToStudy.length > 0) {
+      setActiveCardIndex(0);
+    } else {
+      setActiveCard(undefined);
+    }
+  }, [cardsToStudy]);
+
+  useEffect(() => {
+    if (activeCardIndex >= 0 && activeCardIndex < cardsToStudy.length) {
+      setActiveCard(cardsToStudy[activeCardIndex]);
+    }
+  }, [activeCardIndex]);
 
   const onSubmitAnswer = async (response: string) => {
     if (activeCard != null) {
       try {
         await studyCard(activeCard.id, response, activeCardIndex == cards.length-1);
-        setActiveCardIndex(i => i+1);
 
         // re-fetch due cards if reached the end
-        toast.message("Let's try again");
-        
-        // if (activeCardIndex >= cards.length) {
-        //   router.refresh();
-        // }
+        setShowAnswer(false);
+        if (activeCardIndex >= cards.length-1) {
+          toast.success("Nice job! Let's re-review the questions you got wrong.");
+          await refetchCards();
+        } else {
+          setActiveCardIndex(i => i+1);
+        }
       } catch (e) {
         toast.error('Unable to submit response. Please refresh the page and try again');
       }
@@ -45,9 +58,21 @@ const StudyPage:React.FC<Props> = ({ cards, due }) => {
     }
   }
 
+  const refetchCards = async () => {
+    try {
+      const url = `api/to-study/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`
+      const res = await fetch(url);
+      const data = await res.json();
+      console.log(data);
+      setCardsToStudy(data);
+    } catch (e) {
+      toast.error('Something went wrong fetching cards. Please try again.');
+    }
+  }
+
   return (
     <div className='w-full h-screen'>
-      {(activeCardIndex >= 0 && activeCardIndex < cards.length) ?
+      {activeCard ?
         <div className='w-full h-full'>
           <h1>Study {due ? 'Due' : 'All'}</h1>
           <div className='w-full h-full pl-12 pr-24 py-12'>
@@ -69,7 +94,7 @@ const StudyPage:React.FC<Props> = ({ cards, due }) => {
           </div>
         </div>
 
-        : 'You have no more cards to study today! Take a rest!'
+        : <h4 className='text-center mt-10'>You have no more cards to study today! Take a rest!</h4>
       }
 
     </div>

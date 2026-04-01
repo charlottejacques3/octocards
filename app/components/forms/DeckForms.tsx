@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FieldValues, Form, useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 import { FormTypeEnum } from '@/lib/definitions';
-import { createDeck, updateDeck, deleteDeck } from '@/api/decks';
+import { createDeck, updateDeck, deleteDeck } from '@/app/api/decks';
 import Button from '../Button';
 
 interface DeckUpdateCreateProps {

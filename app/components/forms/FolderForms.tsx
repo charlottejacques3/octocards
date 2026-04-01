@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 import { FormTypeEnum } from '@/lib/definitions';
-import { createFolder, updateFolder, deleteFolder } from '@/api/folders';
+import { createFolder, updateFolder, deleteFolder } from '@/app/api/folders';
 import Button from '../Button';
 
 interface FolderUpdateCreateProps {

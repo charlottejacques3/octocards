@@ -1,6 +1,6 @@
 import { Deck, CardOverview } from "@/lib/definitions";
-import { getDeck } from "@/api/decks";
-import { getCardOverviews } from "@/api/cards";
+import { getDeck } from "@/app/api/decks";
+import { getCardOverviews } from "@/app/api/cards";
 import DeckPage from "./DeckPage";
 import NotFound from "@/app/components/NotFound";
 

@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { toast } from 'sonner'
 import { DueCount } from '@/lib/definitions'
-import { callAPI } from '@/api/helpers'
+import { callAPI } from '@/app/api/helpers'
 
 interface Props {
   element: DueCount,

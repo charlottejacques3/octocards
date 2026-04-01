@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import LoginSignup from '../../components/LoginSignup'
 import { AuthEnum } from '@/lib/definitions'
 import { FieldValues } from 'react-hook-form'
-import { signup } from '@/api/auth'
+import { signup } from '@/app/api/auth'
 
 const page = () => {
 

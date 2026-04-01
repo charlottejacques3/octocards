@@ -1,5 +1,5 @@
 import { Folder } from '@/lib/definitions';
-import { getFolders } from '@/api/folders'
+import { getFolders } from '@/app/api/folders'
 import StudySets from './StudySets';
 import NotFound from '@/app/components/NotFound';
 

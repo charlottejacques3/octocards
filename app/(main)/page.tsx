@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { DueCount } from '@/lib/definitions';
-import { me } from '@/api/auth'
-import { getCardCounts, getAllFolderDueCounts } from '@/api/counts';
+import { me } from '@/app/api/auth'
+import { getCardCounts, getAllFolderDueCounts } from '@/app/api/counts';
 import Homepage from './Homepage';
 import NotFound from '../components/NotFound';
 

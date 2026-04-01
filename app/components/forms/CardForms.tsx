@@ -3,7 +3,7 @@ import { FieldValues, Form, useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 import { FormTypeEnum } from '@/lib/definitions';
 import Button from '../Button';
-import { createCard, updateCard, deleteCard } from '@/api/cards';
+import { createCard, updateCard, deleteCard } from '@/app/api/cards';
 
 interface CardUpdateCreateProps {
   type: FormTypeEnum,

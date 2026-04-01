@@ -1,6 +1,6 @@
 import { Folder, Deck } from "@/lib/definitions";
-import { getFolder } from "@/api/folders";
-import { getDecks } from "@/api/decks";
+import { getFolder } from "@/app/api/folders";
+import { getDecks } from "@/app/api/decks";
 import FolderPage from "./FolderPage";
 import NotFound from "@/app/components/NotFound";
 
