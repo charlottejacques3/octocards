@@ -1,22 +1,29 @@
 'use client'
 import React, { useState } from 'react'
 import { Folder, Deck, ObjectEnum } from '@/lib/definitions'
+import Button from '@/app/components/Button'
 import CreateCard from '@/app/components/cards/CreateCard'
 import DeckCard from '@/app/components/cards/DeckCard'
 
 interface Props {
   folder: Folder,
-  decks: Deck[]
+  decks: Deck[],
+  allCount: number,
+  dueCount: number
 }
 
-const FolderPage:React.FC<Props> = ({ folder, decks }) => {
+const FolderPage:React.FC<Props> = ({ folder, decks, allCount, dueCount }) => {
   
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
   return (
     <div className='w-full h-screen' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{folder.name}</h1>
-      <h4>Decks</h4>
+      <div className='flex'>
+        <h4>Decks</h4>
+        <Button href={`/study/?due=false&folder=${folder.id}`} className='ml-5 mr-3'>Study All (<span className='font-bold'>{allCount}</span>)</Button>
+        <Button href={`/study/?due=true&folder=${folder.id}`}>Study Due (<span className='font-bold'>{dueCount}</span>)</Button>
+      </div>
       <div className='flex flex-wrap'>
         <CreateCard objectToCreate={ObjectEnum.DECK} parentId={folder?.id}/>
         {decks.map((deck) => 

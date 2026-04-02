@@ -20,7 +20,7 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
   const [menuIconVisible, setMenuIconVisible] = useState<boolean>(false);
   const [cardContent, setCardContent] = useState<string>(content);
 
-  const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover';
+  const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover ';
 
   useEffect(() => {
     setCardContent(content);
@@ -59,8 +59,8 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
         className={`z-10 shadow-xl absolute left-60 rounded-lg top-3 bg-bg-secondary border border-text-secondary ${!menuOpen && 'hidden'}`}
         onClick={(e) => {e.stopPropagation(); setMenuOpen(false)}}
       >
-        <div className={`${menuItemStyles} border-b border-b-text-secondary`} onClick={() => setUpdateModalOpen(true)}>Edit</div>
-        <div className={menuItemStyles} onClick={() => setDeleteModalOpen(true)}>Delete</div>
+        <div className={`${menuItemStyles} border-b border-b-text-secondary rounded-t-lg`} onClick={() => setUpdateModalOpen(true)}>Edit</div>
+        <div className={`${menuItemStyles} rounded-b-lg`} onClick={() => setDeleteModalOpen(true)}>Delete</div>
       </div>
 
       {/* card content */}

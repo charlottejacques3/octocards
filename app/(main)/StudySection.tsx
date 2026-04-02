@@ -45,7 +45,7 @@ const StudySection:React.FC<Props> = ({ element, isFolder }) => {
           {element.name}
           <span className='ml-2 font-bold'>{element.card_count}</span>
         </div>
-        <Link href='' className='hover:underline'>Study</Link>
+        <Link href={`/study/?due=true&${isFolder ? 'folder' : 'deck'}=${element.id}`} className='hover:underline'>Study</Link>
       </div>
       {(isOpen && isFolder) && decks.map((deck) => <StudySection key={deck.id} element={deck} isFolder={false}/>)}
     </>

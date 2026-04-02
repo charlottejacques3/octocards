@@ -12,7 +12,6 @@ const page = async ({ searchParams } : { searchParams: Promise<{ [key: string]: 
 
   try {
     const cards:CardOverview[] = await getCardsToStudy(parsed.due, parsed.category, parsed.categoryId);
-    console.log(cards);
     return <StudyPage cards={cards} due={parsed.due} category={parsed.category} categoryId={parsed.categoryId}/>
   } catch (e) {
     return <NotFound message="Cards not found"/>

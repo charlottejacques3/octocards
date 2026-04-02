@@ -14,7 +14,6 @@ export const getCardOverviews = async (deckId: number) => {
 
 
 export const getCardsToStudy = async (due: boolean, category?: string, categoryId?: number) => {
-
   const url = `cards/to-study/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`;
   const CardsSchema = z.array(CardOverviewSchema);
   const res = await callAPIServer(url);
