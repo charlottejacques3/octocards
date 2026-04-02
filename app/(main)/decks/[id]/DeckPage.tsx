@@ -19,7 +19,7 @@ const DeckPage:React.FC<Props> = ({ deck, cards, allCount, dueCount }) => {
   return (
     <div className='w-full h-screen' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{deck.name}</h1>
-      <div className='flex'>
+      <div className='flex mt-4'>
         <h4>Cards</h4>
         <Button href={`/study/?due=false&deck=${deck.id}`} className='ml-5 mr-3'>Study All (<span className='font-bold'>{allCount}</span>)</Button>
         <Button href={`/study/?due=true&deck=${deck.id}`}>Study Due (<span className='font-bold'>{dueCount}</span>)</Button>

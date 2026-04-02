@@ -10,7 +10,7 @@ interface Props {
   setMenuOpen: (open: boolean) => void,
 }
 
-const DeckCard:React.FC<Props> = ({ card, menuOpen, setMenuOpen }) => {
+const FlashcardCard:React.FC<Props> = ({ card, menuOpen, setMenuOpen }) => {
 
   const [updateModalOpen, setUpdateModelOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModelOpen] = useState<boolean>(false);
@@ -44,4 +44,4 @@ const DeckCard:React.FC<Props> = ({ card, menuOpen, setMenuOpen }) => {
   )
 }
 
-export default DeckCard
+export default FlashcardCard

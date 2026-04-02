@@ -5,9 +5,9 @@ import { DeckSchema } from "@/lib/definitions";
 import { callAPIServer } from "./callAPIServer";
 
 
-export const getDecks = async (folderId: number) => {
+export const getDecks = async (folderId?: number) => {
   const DecksSchema = z.array(DeckSchema);
-  const res = await callAPIServer(`decks/by-folder/${folderId}`);
+  const res = await callAPIServer(`decks/by-folder/${folderId ? folderId : ''}`);
   const decks = DecksSchema.parse(await res.json());
   return decks;
 }
@@ -20,7 +20,7 @@ export const getDeck = async (id: number) => {
 }
 
 
-export const createDeck = async (newName: string, folderId: number) => {
+export const createDeck = async (newName: string, folderId?: number) => {
   const { name, folder } = DeckSchema.omit({ id: true}).parse({
     name: newName,
     folder: folderId

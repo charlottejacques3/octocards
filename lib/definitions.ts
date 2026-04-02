@@ -28,7 +28,7 @@ export type Folder = z.infer<typeof FolderSchema>;
 export const DeckSchema = z.object({
   id: z.number(),
   name: z.string(),
-  folder: z.number(),
+  folder: z.number().nullish(),
 });
 
 export type Deck = z.infer<typeof DeckSchema>;

@@ -33,7 +33,7 @@ export const DeckUpdateCreateForm:React.FC<DeckUpdateCreateProps> = ({ type, clo
   }, [defaultVal, reset]);
 
   const handleFormSubmit = async (data: FieldValues) => {
-    if (type === FormTypeEnum.CREATE && folderId) {
+    if (type === FormTypeEnum.CREATE) {
       try {
         await createDeck(data.newName, folderId);
       } catch (e) {

@@ -19,7 +19,7 @@ const FolderPage:React.FC<Props> = ({ folder, decks, allCount, dueCount }) => {
   return (
     <div className='w-full h-screen' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{folder.name}</h1>
-      <div className='flex'>
+      <div className='flex mt-4'>
         <h4>Decks</h4>
         <Button href={`/study/?due=false&folder=${folder.id}`} className='ml-5 mr-3'>Study All (<span className='font-bold'>{allCount}</span>)</Button>
         <Button href={`/study/?due=true&folder=${folder.id}`}>Study Due (<span className='font-bold'>{dueCount}</span>)</Button>
