@@ -55,7 +55,6 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
         // re-fetch due cards if reached the end
         setShowAnswer(false);
         if (activeCardIndex >= cards.length-1) {
-          toast.success("Nice job! Let's re-review the questions you got wrong.");
           await refetchCards();
         } else {
           setActiveCardIndex(i => i+1);
@@ -73,7 +72,9 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
       const url = `api/to-study/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`
       const res = await fetch(url);
       const data = await res.json();
-      console.log(data);
+      if (data.length > 0) {
+        toast.success("Nice job! Let's re-review the questions you got wrong.");
+      }
       setCardsToStudy(data);
     } catch (e) {
       toast.error('Something went wrong fetching cards. Please try again.');

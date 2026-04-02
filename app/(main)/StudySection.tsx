@@ -7,10 +7,11 @@ import { callAPI } from '@/app/api/helpers'
 
 interface Props {
   element: DueCount,
-  isFolder: boolean
+  isFolder?: boolean,
+  isUncategorizedDeck?: boolean
 }
 
-const StudySection:React.FC<Props> = ({ element, isFolder }) => {
+const StudySection:React.FC<Props> = ({ element, isFolder=false, isUncategorizedDeck=false }) => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [decks, setDecks] = useState<DueCount[]>([]);
@@ -33,7 +34,7 @@ const StudySection:React.FC<Props> = ({ element, isFolder }) => {
 
   return (
     <>
-      <div className={`bg-bg-secondary hover:bg-bg-secondary-hover rounded-lg flex justify-between mr-10 my-2 py-1 px-2 ${!isFolder && 'ml-6'}`}>
+      <div className={`bg-bg-secondary hover:bg-bg-secondary-hover rounded-lg flex justify-between mr-10 my-2 py-1 px-2 ${(!isFolder && !isUncategorizedDeck) && 'ml-6'}`}>
         <div className='flex items-center'>
           {isFolder && 
             <Image 

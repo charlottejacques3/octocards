@@ -19,3 +19,10 @@ export const getAllFolderDueCounts = async () => {
   const data = await res.json();
   return data;
 }
+
+
+export const getUncategorizedDeckDueCounts = async () => {
+  const res = await callAPIServer('decks/due-count/');
+  const data = await res.json();
+  return data;
+}
