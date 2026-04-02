@@ -8,9 +8,10 @@ import Modal from '../Modal'
 interface Props {
   objectToCreate: ObjectEnum,
   parentId?: number,
+  flashcard?: boolean,
 }
 
-const CreateCard:React.FC<Props> = ({ objectToCreate, parentId }) => {
+const CreateCard:React.FC<Props> = ({ objectToCreate, parentId, flashcard=false }) => {
 
   const [createModalOpen, setCreateModalOpen] = useState<boolean>(false);
 
@@ -29,7 +30,7 @@ const CreateCard:React.FC<Props> = ({ objectToCreate, parentId }) => {
 
   return (
     <>
-      <div className='flex justify-center items-center bg-bg-secondary rounded-lg mr-4 mt-2 w-64 cursor-pointer hover:bg-bg-secondary-hover' onClick={() => setCreateModalOpen(true)}>
+      <div className={`flex justify-center items-center bg-bg-secondary rounded-lg mr-4 mt-2 w-64 cursor-pointer hover:bg-bg-secondary-hover ${flashcard && 'h-30'}`} onClick={() => setCreateModalOpen(true)}>
         <h1>+</h1>
       </div>
 
