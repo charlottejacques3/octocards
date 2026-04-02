@@ -11,12 +11,13 @@ interface Props {
   type?: ButtonType,
   priority?: ButtonPriority,
   href?: string,
+  blocked?: boolean
 }
 
-const Button:React.FC<Props> = ({ children, onClick, className='', type='button', priority='primary', href }) => {
+const Button:React.FC<Props> = ({ children, onClick, className='', type='button', priority='primary', href, blocked=false }) => {
 
   const classes = `
-    ${className} cursor-pointer rounded-lg p-1
+    ${className} ${blocked ? 'cursor-not-allowed' : 'cursor-pointer'} rounded-lg p-1
     ${priority === 'primary' && 'bg-button-primary hover:bg-button-primary-hover'}
     ${priority === 'correct' && 'bg-button-correct hover:bg-button-correct-hover'}
     ${priority === 'partially-correct' && 'bg-button-partially-correct hover:bg-button-partially-correct-hover'}

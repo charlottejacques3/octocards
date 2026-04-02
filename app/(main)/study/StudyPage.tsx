@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { Card, CardOverview } from '@/lib/definitions'
+import { CardOverview } from '@/lib/definitions'
 import { studyCard } from '@/app/api/cards'
 import Button from '@/app/components/Button'
 
@@ -21,6 +21,7 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
 
   useEffect(() => {
     setCardsToStudy(cards);
+    console.log(`/${category ? (category + 's/' + categoryId) : ''}`);
   }, []);
 
   useEffect(() => {
@@ -36,6 +37,15 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
       setActiveCard(cardsToStudy[activeCardIndex]);
     }
   }, [activeCardIndex]);
+
+  const updateCardStudyAll = (next: boolean) => {
+    if (next) {
+      if (activeCardIndex >= cards.length-1) setActiveCard(undefined);
+      else setActiveCardIndex(i => i+1);
+    } else if (activeCardIndex > 0) {
+      setActiveCardIndex(i => i-1);
+    }
+  }
 
   const onSubmitAnswer = async (response: string) => {
     if (activeCard != null) {
@@ -85,16 +95,37 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
               <h1>{showAnswer ? activeCard.answer : activeCard.question}</h1>
             </div>
 
-            {/* correct/incorrect buttons */}
             <div className='flex flex-col md:flex-row mt-5'>
-              <Button onClick={() => onSubmitAnswer('incorrect')} className='w-full mb-3 md:mr-5'>Incorrect</Button>
-              <Button onClick={() => onSubmitAnswer('partial')} priority='partially-correct' className='w-full mb-3 md:mr-5'>Partially Correct</Button>
-              <Button onClick={() => onSubmitAnswer('correct')} className='w-full mb-3' priority='correct'>Correct</Button>
+              {due ?
+                <>
+                  {/* correct/incorrect buttons */}
+                  <Button onClick={() => onSubmitAnswer('incorrect')} className='w-full mb-3 md:mr-5'>Incorrect</Button>
+                  <Button onClick={() => onSubmitAnswer('partial')} priority='partially-correct' className='w-full mb-3 md:mr-5'>Partially Correct</Button>
+                  <Button onClick={() => onSubmitAnswer('correct')} className='w-full mb-3' priority='correct'>Correct</Button>
+                </> :
+                <>
+                  {/* next/previous buttons */}
+                  <Button 
+                    onClick={() => updateCardStudyAll(false)} priority='secondary' 
+                    className={`w-full mb-3 md:mr-5 ${activeCardIndex == 0 && 'bg-bg-secondary-hover text-gray-500'}`} 
+                    blocked={activeCardIndex == 0}
+                  >Previous</Button>
+                  <Button onClick={() => updateCardStudyAll(true)} className='w-full mb-3'>Next</Button>
+                </>
+              }
             </div>
           </div>
         </div>
 
-        : <h4 className='text-center mt-10'>You have no more cards to study today! Take a rest!</h4>
+        : <div className='flex flex-col h-full items-center justify-center'>
+          <h4>You have no more cards to study today! Take a rest!</h4>
+          <Button 
+            href={`/${category ? (category + 's/' + categoryId) : ''}`}
+            className='mt-5 p-3'
+          >
+            Back to {category ? category : 'home'}
+          </Button>
+        </div>
       }
 
     </div>

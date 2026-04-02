@@ -28,7 +28,7 @@ const SideNav = () => {
           )}
         </div>
       : <Image 
-          src='menu.png' width={20} height={20} alt='Menu icon' 
+          src='/menu.png' width={20} height={20} alt='Menu icon' 
           onClick={() => setExpanded(true)}
           className='cursor-pointer m-5 w-5 h-5'
         />}
