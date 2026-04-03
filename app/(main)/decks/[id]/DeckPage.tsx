@@ -21,8 +21,8 @@ const DeckPage:React.FC<Props> = ({ deck, cards, allCount, dueCount }) => {
       <h1>{deck.name}</h1>
       <div className='flex mt-4'>
         <h4>Cards</h4>
-        <Button href={`/study/?due=false&deck=${deck.id}`} className='ml-5 mr-3 px-2'>Study All (<span className='font-bold'>{allCount}</span>)</Button>
-        <Button href={`/study/?due=true&deck=${deck.id}`} className='px-2'>Study Due (<span className='font-bold'>{dueCount}</span>)</Button>
+        {allCount > 0 && <Button href={`/study/?due=false&deck=${deck.id}`} className='ml-5 mr-3 px-2'>Study All (<span className='font-bold'>{allCount}</span>)</Button>}
+        {dueCount > 0 && <Button href={`/study/?due=true&deck=${deck.id}`} className='px-2'>Study Due (<span className='font-bold'>{dueCount}</span>)</Button>}
       </div>
       <div className='flex flex-wrap'>
         <CreateCard objectToCreate={ObjectEnum.CARD} parentId={deck?.id} flashcard/>

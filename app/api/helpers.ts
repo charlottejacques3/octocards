@@ -20,7 +20,7 @@ export const callAPI = async (path: string, options: APICallOptions={}) => {
 }
 
 
-export const parseUrlParams = (dueStr?: string, folder?: string, deck?: string) => {
+export const parseUrlParams = (dueStr?: string|string[], folder?: string|string[], deck?: string|string[]) => {
   const due = dueStr === 'true';
   let category;
   let categoryId;
