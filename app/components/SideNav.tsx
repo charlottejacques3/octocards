@@ -1,15 +1,15 @@
 'use client'
 import { useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import Button from './Button'
+import { logout } from '../api/logout'
 
 const SideNav = () => {
   
   const [expanded, setExpanded] = useState<boolean>(true);
   const routes = [
     { text: 'Home', href: '/' },
-    { text: 'Study Sets', href: '/study-sets' },
-    { text: 'Account', href: '/account' }
+    { text: 'Study Sets', href: '/study-sets' }
   ]
 
   return (
@@ -23,9 +23,10 @@ const SideNav = () => {
           />
           {routes.map((route) => 
             <div key={route.text} className='mb-2'>
-              <Link href={route.href} className='hover:underline'>{route.text}</Link>
+              <Button href={route.href} priority='underline'>{route.text}</Button>
             </div>
           )}
+          <Button priority='underline' onClick={() => logout()}>Log Out</Button>
         </div>
       : <Image 
           src='/menu.png' width={20} height={20} alt='Menu icon' 

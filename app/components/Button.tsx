@@ -22,6 +22,7 @@ const Button:React.FC<Props> = ({ children, onClick, className='', type='button'
     ${priority === 'correct' && 'bg-button-correct hover:bg-button-correct-hover'}
     ${priority === 'partially-correct' && 'bg-button-partially-correct hover:bg-button-partially-correct-hover'}
     ${priority === 'secondary' && 'bg-bg-secondary hover:bg-bg-secondary-hover border border-button-primary'}
+    ${priority === 'underline' && 'hover:underline'}
   `;
 
   return (
