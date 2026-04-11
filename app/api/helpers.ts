@@ -5,7 +5,7 @@ export type APICallOptions = {
 }
 
 export const callAPI = async (path: string, options: APICallOptions={}) => {
-  const res = await fetch(`http://localhost:8000/${path}`, {
+  const res = await fetch(`https://localhost:8000/${path}`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
