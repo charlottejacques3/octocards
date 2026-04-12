@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
 		return [
 			{
-				source: '/api/:path*/',
+				source: '/api-proxy/:path*/',
 				destination: `https://from-savanna-stoop.ngrok-free.dev/:path*/`,
 			},
 		]

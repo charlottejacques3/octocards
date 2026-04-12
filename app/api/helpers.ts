@@ -5,7 +5,7 @@ export type APICallOptions = {
 }
 
 export const callAPI = async (path: string, options: APICallOptions={}) => {
-  const res = await fetch(`https://octocards.vercel.app/api/${path}`, {
+  const res = await fetch(`https://octocards.vercel.app/api-proxy/${path}`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
@@ -16,6 +16,7 @@ export const callAPI = async (path: string, options: APICallOptions={}) => {
   });
   if (!res.ok) {
     const text = await res.text();
+    console.log('error:', text);
     throw new Error(`API error: ${text}`, { cause: res.status });
   }
   return res;
