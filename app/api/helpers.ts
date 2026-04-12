@@ -5,7 +5,7 @@ export type APICallOptions = {
 }
 
 export const callAPI = async (path: string, options: APICallOptions={}) => {
-  const res = await fetch(`https://from-savanna-stoop.ngrok-free.dev/${path}`, {
+  const res = await fetch(`https://octocards.vercel.app/api/${path}`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
