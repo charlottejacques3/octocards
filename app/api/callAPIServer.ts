@@ -8,6 +8,9 @@ export const callAPIServer = async (path: string, options: APICallOptions={}) =>
   const csrftoken = cookieStore.get("csrftoken")?.value;
   const cookieHeader = cookieStore.toString();
 
+  console.log("Cookies being sent:", cookieHeader);
+  console.log("CSRF token:", csrftoken);
+
   return await callAPI(path, {
     header: {
       'cookie': cookieHeader,
