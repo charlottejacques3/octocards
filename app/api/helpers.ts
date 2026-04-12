@@ -14,7 +14,8 @@ export const callAPI = async (path: string, options: APICallOptions={}) => {
     ...options
   });
   if (!res.ok) {
-    throw new Error(`API error: ${res.status}`, { cause: res.status });
+    const text = await res.text();
+    throw new Error(`API error: ${text}`, { cause: res.status });
   }
   return res;
 }
