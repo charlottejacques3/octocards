@@ -8,7 +8,7 @@ export const callAPI = async (path: string, options: APICallOptions={}) => {
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
 
-  const res = await fetch(`${baseUrl}/api-proxy/${path}`, {
+  const res = await fetch(`${baseUrl}api-proxy/${path}`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
