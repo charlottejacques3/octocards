@@ -9,6 +9,7 @@ export const callAPI = async (path: string, options: APICallOptions={}) => {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      'Referer': 'https://octocards.vercel.app/',
       ...(options.header ?? {})
     },
     ...options
