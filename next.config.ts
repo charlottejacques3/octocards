@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 		return [
 			{
 				source: '/api-proxy/:path*/',
-				destination: `https://from-savanna-stoop.ngrok-free.dev/:path*/`,
+				destination: `${process.env.NEXT_PUBLIC_API_URL}:path*/`,
 			},
 		]
 	},
