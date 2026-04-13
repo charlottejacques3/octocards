@@ -57,3 +57,16 @@ h1 {
 h4 {
   font-size: 18px;
 }
+
+@media (min-width: 384px) {
+  .responsiveMenu {
+    width: 16rem;
+    height: fit-content;
+  }
+}
+/* 
+@media (max-width: 383px) {
+  .responsiveMenu {
+    height: 100%;
+  }
+} */
