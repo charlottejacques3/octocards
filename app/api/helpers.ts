@@ -6,11 +6,13 @@ export type APICallOptions = {
 
 export const callAPI = async (path: string, options: APICallOptions={}) => {
 
-  const res = await fetch(`https://octocards.vercel.app/api-proxy/${path}`, {
+  const basePath = process.env.NEXT_PUBLIC_URL;
+
+  const res = await fetch(`${basePath}api-proxy/${path}`, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'Referer': 'https://octocards.vercel.app/',
+      'Referer': basePath ?? '',
       ...(options.header ?? {})
     },
     ...options

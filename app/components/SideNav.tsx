@@ -3,6 +3,8 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Button from './Button'
 import { logout } from '../api/logout'
+import backButton from '../../public/back.png'
+import menuButton from '../../public/menu.png'
 
 const SideNav = () => {
   
@@ -17,7 +19,7 @@ const SideNav = () => {
       {expanded ? 
         <div className='bg-bg-secondary m-5 p-5 w-64 rounded-lg h-fit'>
           <Image 
-            src='/back.png' width={20} height={20} alt='Menu close icon' 
+            src={backButton} width={20} height={20} alt='Menu close icon' 
             onClick={() => setExpanded(false)}
             className='cursor-pointer float-right w-5 h-5'
           />
@@ -29,7 +31,7 @@ const SideNav = () => {
           <Button priority='underline' onClick={() => logout()}>Log Out</Button>
         </div>
       : <Image 
-          src='/menu.png' width={20} height={20} alt='Menu icon' 
+          src={menuButton} width={20} height={20} alt='Menu icon' 
           onClick={() => setExpanded(true)}
           className='cursor-pointer m-5 w-5 h-5'
         />}

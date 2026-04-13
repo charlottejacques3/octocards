@@ -1,7 +1,8 @@
 'use client'
-import React, { useState, useEffect, useEffectEvent } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import menuButton from '../../public/three_dots.png'
 
 interface Props {
   content: string,
@@ -66,7 +67,7 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
       {/* card content */}
       <div className='h-full overflow-y-auto'>
         <Image
-          src='/three_dots.png' height={20} width={20} alt='Three dots menu icon'
+          src={menuButton} height={20} width={20} alt='Three dots menu icon'
           className={`cursor-pointer absolute right-5 top-5 w-5 h-5 hover:bg-bg-secondary-hover rounded-lg p-1 ${!menuIconVisible && 'hidden'}`}
           onClick={(e) => {e.stopPropagation(); setMenuOpen(!menuOpen)}}
         />

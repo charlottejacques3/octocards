@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { toast } from 'sonner'
 import { DueCount } from '@/lib/definitions'
 import { callAPI } from '@/app/api/helpers'
+import forwardButton from '../../public/forward.png'
 
 interface Props {
   element: DueCount,
@@ -38,7 +39,7 @@ const StudySection:React.FC<Props> = ({ element, isFolder=false, isUncategorized
         <div className='flex items-center'>
           {isFolder && 
             <Image 
-              src='forward.png' width={20} height={20} alt='Folder toggle open icon'
+              src={forwardButton} width={20} height={20} alt='Folder toggle open icon'
               onClick={() => setIsOpen(open => !open)}
               className={`cursor-pointer w-4 h-4 mr-1 ${isOpen && 'rotate-90'}`}
             />
