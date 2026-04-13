@@ -26,7 +26,7 @@ const StudySets:React.FC<Props> = ({ folders, decks }) => {
   }
 
   return (
-    <div className='w-full h-screen' onClick={closeMenu}>
+    <div className='w-full h-screen overflow-y-auto' onClick={closeMenu}>
       <h1>Study Sets</h1>
       <h4 className='mt-5'>Folders</h4>
       <div className='flex flex-wrap'>

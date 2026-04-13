@@ -17,7 +17,7 @@ const FolderPage:React.FC<Props> = ({ folder, decks, allCount, dueCount }) => {
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
   return (
-    <div className='w-full h-screen' onClick={() => setMenuOpenIndex(-1)}>
+    <div className='w-full h-screen overflow-y-auto' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{folder.name}</h1>
       <div className='flex mt-4'>
         <h4>Decks</h4>

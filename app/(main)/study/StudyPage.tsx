@@ -40,7 +40,7 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
 
   const updateCardStudyAll = (next: boolean) => {
     if (next) {
-      if (activeCardIndex >= cards.length-1) setActiveCard(undefined);
+      if (activeCardIndex >= cardsToStudy.length-1) setActiveCard(undefined);
       else setActiveCardIndex(i => i+1);
     } else if (activeCardIndex > 0) {
       setActiveCardIndex(i => i-1);
@@ -50,11 +50,11 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
   const onSubmitAnswer = async (response: string) => {
     if (activeCard != null) {
       try {
-        await studyCard(activeCard.id, response, activeCardIndex == cards.length-1);
+        await studyCard(activeCard.id, response);
 
         // re-fetch due cards if reached the end
         setShowAnswer(false);
-        if (activeCardIndex >= cards.length-1) {
+        if (activeCardIndex >= cardsToStudy.length-1) {
           await refetchCards();
         } else {
           setActiveCardIndex(i => i+1);

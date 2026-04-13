@@ -14,7 +14,7 @@ interface Props {
 const Homepage:React.FC<Props> = ({ username, totalCount, folderDueCounts, uncategorizedDeckDueCounts }) => {
 
   return (
-    <div className='w-full h-screen'>
+    <div className='w-full h-screen overflow-y-auto'>
       <h1>{username ? `Hello, ${username}!` : 'Welcome back!'}</h1> 
       <div className='flex'>
         <h4>You have {totalCount} card{totalCount != 1 && 's'} to study today.</h4>
