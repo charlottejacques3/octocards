@@ -37,6 +37,8 @@ export const CardUpdateCreateForm:React.FC<CardUpdateCreateProps> = ({ type, clo
     if (type === FormTypeEnum.CREATE && deckId) {
       try {
         await createCard(data.q, data.a, deckId);
+        toast.success('New card successfully created!')
+        reset();
       } catch (e) {
         toast.error('Failed to create card. Please try again');
       }
@@ -49,8 +51,8 @@ export const CardUpdateCreateForm:React.FC<CardUpdateCreateProps> = ({ type, clo
       }
     } else {
       toast.error('Error: missing ID');
+      onClose();
     }
-    onClose();
   }
 
   const onClose = () => {

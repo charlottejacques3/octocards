@@ -20,7 +20,8 @@ const SideNav = () => {
 
   const routes = [
     { text: 'Home', href: '/' },
-    { text: 'Study Sets', href: '/study-sets' }
+    { text: 'Study Sets', href: '/study-sets' },
+    { text: 'About', href: '/about' }
   ]
 
   return (
@@ -42,7 +43,8 @@ const SideNav = () => {
               <Button href={route.href} priority='underline'>{route.text}</Button>
             </div>
           )}
-          <Button priority='underline' onClick={() => logout()}>Log Out</Button>
+          <hr/>
+          <Button priority='underline' onClick={() => logout()} className='mt-2'>Log Out</Button>
         </div>
       } {(!expanded || loading) && 
         <Image 
