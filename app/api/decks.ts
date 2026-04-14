@@ -15,8 +15,8 @@ export const getDecks = async (folderId?: number) => {
 
 export const getDeck = async (id: number) => {
   const res = await callAPIServer(`decks/${id}`);
-  const folder = DeckSchema.parse(await res.json());
-  return folder;
+  const deck = DeckSchema.parse(await res.json());
+  return deck;
 }
 
 

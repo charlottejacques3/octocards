@@ -1,16 +1,19 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, Suspense, use } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { Deck, Folder, ObjectEnum } from '@/lib/definitions'
 import CreateCard from '@/app/components/cards/CreateCard'
-import FolderCard from '@/app/components/cards/FolderCard'
-import DeckCard from '@/app/components/cards/DeckCard'
+import FolderList from './FolderList'
+import DeckList from './DeckList'
+import LoadingCard from '@/app/components/cards/LoadingCard'
+import NotFound from '@/app/components/NotFound'
 
 interface Props {
-  folders: Folder[],
-  decks: Deck[]
+  foldersPromise: Promise<Folder[]>,
+  decksPromise: Promise<Deck[]>
 }
 
-const StudySets:React.FC<Props> = ({ folders, decks }) => {
+const StudySets:React.FC<Props> = ({ foldersPromise, decksPromise }) => {
 
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
   const [menuOpenObjectType, setMenuOpenObjectType] = useState<ObjectEnum | null>(null);
@@ -31,26 +34,32 @@ const StudySets:React.FC<Props> = ({ folders, decks }) => {
       <h4 className='mt-5'>Folders</h4>
       <div className='flex flex-wrap'>
         <CreateCard objectToCreate={ObjectEnum.FOLDER}/>
-        {folders.map((folder) =>
-          <FolderCard
-            key={folder.id}
-            folder={folder}
-            menuOpen = {menuOpenIndex === folder.id && menuOpenObjectType === ObjectEnum.FOLDER}
-            setMenuOpen={(open: boolean) => open ? openMenu(folder.id, ObjectEnum.FOLDER) : closeMenu()}
-          />
-        )}
+        <ErrorBoundary fallback={<NotFound message='Error loading folders, please try again'/>}>
+          <Suspense fallback={<LoadingCard/>}>
+            <FolderList
+              foldersPromise={foldersPromise}
+              menuOpenIndex={menuOpenIndex}
+              menuOpenObjectType={menuOpenObjectType}
+              openMenu={openMenu}
+              closeMenu={closeMenu}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </div>
       <h4 className='mt-5'>Uncategorized Decks</h4>
       <div className='flex flex-wrap'>
         <CreateCard objectToCreate={ObjectEnum.DECK}/>
-        {decks.map((deck) => 
-          <DeckCard
-            key={deck.id}
-            deck={deck}
-            menuOpen = {menuOpenIndex === deck.id && menuOpenObjectType === ObjectEnum.DECK}
-            setMenuOpen={(open: boolean) => open ? openMenu(deck.id, ObjectEnum.DECK) : closeMenu()}
-          />
-        )}
+        <ErrorBoundary fallback={<NotFound message='Error loading decks, please try again'/>}>
+          <Suspense fallback={<LoadingCard/>}>
+            <DeckList
+              decksPromise={decksPromise}
+              menuOpenIndex={menuOpenIndex}
+              menuOpenObjectType={menuOpenObjectType}
+              openMenu={openMenu}
+              closeMenu={closeMenu}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </div>
     </div>
   )
