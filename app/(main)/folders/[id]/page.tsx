@@ -9,10 +9,12 @@ const page = async ({ params } : { params: Promise<{id: number}> }) => {
 
   const folderId = (await params).id;
   try {
-    const decks:Deck[] = await getDecks(folderId);
-    const folder:Folder = await getFolder(folderId);
-    const allCount = await getCardCounts(false, 'folder', folderId);
-    const dueCount = await getCardCounts(true, 'folder', folderId);
+    const [decks, folder, allCount, dueCount]:[Deck[], Folder, number, number] = await Promise.all([
+      getDecks(folderId), 
+      getFolder(folderId), 
+      getCardCounts(false, 'folder', folderId), 
+      getCardCounts(true, 'folder', folderId)
+    ]);
     return (
       <div className='w-full'>
         <FolderPage folder={folder} decks={decks} allCount={allCount} dueCount={dueCount}/>

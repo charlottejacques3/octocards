@@ -9,10 +9,12 @@ const page = async ({ params } : { params: Promise<{id: number}> }) => {
 
   const deckId = (await params).id;
   try {
-    const deck:Deck = await getDeck(deckId);
-    const cards:CardOverview[] = await getCardOverviews(deckId);
-    const allCount = await getCardCounts(false, 'deck', deckId);
-    const dueCount = await getCardCounts(true, 'deck', deckId);
+    const [deck, cards, allCount, dueCount]:[Deck, CardOverview[], number, number] = await Promise.all([
+      getDeck(deckId), 
+      getCardOverviews(deckId), 
+      getCardCounts(false, 'deck', deckId), 
+      getCardCounts(true, 'deck', deckId)
+    ]);
     return (
       <div className='w-full'>
         <DeckPage deck={deck} cards={cards} allCount={allCount} dueCount={dueCount}/>

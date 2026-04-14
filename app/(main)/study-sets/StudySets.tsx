@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, Suspense, use } from 'react'
+import React, { useState, Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { Deck, Folder, ObjectEnum } from '@/lib/definitions'
 import CreateCard from '@/app/components/cards/CreateCard'
