@@ -60,7 +60,7 @@ export const deleteCard = async (id: number) => {
 
 
 export const studyCard = async (id: number, response: string) => {
-  await callAPIServer(`cards/${id}/study-card/${response}/`, {
+  await callAPIServer(`items/${id}/study-card/${response}/`, {
     method: 'PATCH',
   });
 }

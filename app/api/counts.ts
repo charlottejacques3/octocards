@@ -3,7 +3,7 @@ import { callAPIServer } from "./callAPIServer"
 
 
 export const getCardCounts = async (due: boolean, category?: string, categoryId?: number) => {
-  const url = `cards/count/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`;
+  const url = `items/count/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`;
   const res = await callAPIServer(url);
   const data = await res.json();
   if (data.count != undefined) {
