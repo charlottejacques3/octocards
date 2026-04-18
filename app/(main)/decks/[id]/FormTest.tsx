@@ -9,7 +9,7 @@ const FormTest = () => {
   
   const { control, register, handleSubmit } = useForm({
     defaultValues: {
-      test: [{ value: ['hello'], id: 7}, { value: ['hello'], id: 8}, { value: ['hello'], id: 14}]
+      test: [{ value: 'hello', id: 7}, { value: 'hello', id: 8}, { value: 'hello', id: 14}]
     }
   });
   const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
