@@ -21,7 +21,7 @@ const page = async ({ params } : { params: Promise<{id: number}> }) => {
       </div>
     );
   } catch (e) {
-    return <NotFound message='Error loading data, please try again'/>;
+    return <NotFound message='Error loading data, please try again' fullscreen/>;
   }
 }
 

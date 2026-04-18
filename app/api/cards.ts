@@ -1,7 +1,7 @@
 'use server'
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import { CardSchema, CardOverviewSchema } from "@/lib/definitions";
+import { CardOverviewSchema } from "@/lib/definitions";
 import { callAPIServer } from "./callAPIServer";
 
 

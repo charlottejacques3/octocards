@@ -54,3 +54,30 @@ export type DueCount = {
   name: string,
   card_count: number
 }
+
+export const TableSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  deck: z.number(),
+});
+
+export type Table = z.infer<typeof TableSchema>;
+
+export const TableHeaderSchema = z.object({
+  id: z.number(),
+  text: z.string(),
+  table: z.number(),
+  index: z.number()
+});
+
+export type TableHeader = z.infer<typeof TableHeaderSchema>;
+
+export const TableItemSchema = z.object({
+  id: z.number(),
+  text: z.string(),
+  table: z.number(),
+  row: z.number(),
+  col: z.number(),
+});
+
+export type TableItem = z.infer<typeof TableItemSchema>;

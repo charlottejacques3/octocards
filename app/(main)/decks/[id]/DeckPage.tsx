@@ -1,9 +1,11 @@
 'use client'
 import React, { useState } from 'react'
+import dynamic from 'next/dynamic'
 import { Deck, CardOverview, ObjectEnum } from '@/lib/definitions'
 import Button from '@/app/components/Button'
 import CreateCard from '@/app/components/cards/CreateCard'
 import FlashcardCard from '@/app/components/cards/FlashcardCard'
+// import FormTest from './FormTest'
 
 interface Props {
   deck: Deck
@@ -16,9 +18,13 @@ const DeckPage:React.FC<Props> = ({ deck, cards, allCount, dueCount }) => {
   
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
 
+  // const FormTest = dynamic(() => import('./FormTest'), { ssr: false })
+
   return (
     <div className='w-full h-screen overflow-y-auto' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{deck.name}</h1>
+      
+      {/* <FormTest/> */}
       <div className='flex mt-4'>
         <h4>Cards</h4>
         {allCount > 0 && <Button href={`/study/?due=false&deck=${deck.id}`} className='ml-5 mr-3 px-2'>Study All (<span className='font-bold'>{allCount}</span>)</Button>}
