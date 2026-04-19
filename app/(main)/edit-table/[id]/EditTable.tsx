@@ -24,17 +24,20 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     return cells[`${row.id}-${col.id}`];
   }
 
-  const cellDefaultVals = useMemo(() => {
+  const [cellDefaultVals, emptyCells] = useMemo(() => {
     const vals:{value: string, id: number}[] = [];
+    const empties:{value: string, rowIndex: number, colIndex: number}[] = [];
     rows.forEach((row) => {
       cols.forEach((col) => {
         const cell = getCell(row, col);
         if (cell) {
           vals.push({ value: cell.text, id: cell.id });
+        } else {
+          empties.push({ value: '', rowIndex: row.index, colIndex: col.index })
         }
       });
     });
-    return vals;
+    return [vals, empties];
   }, []);
 
   const headerDefaultVals:{value: string, id: number}[] = (rows.concat(cols)).map((row) => ({value: row.text, id: row.id}));
@@ -80,6 +83,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     defaultValues: {
       existing: cellDefaultVals,
       existingHeaders: headerDefaultVals,
+      new: emptyCells
     } 
   });
 
@@ -166,7 +170,10 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     {/* cells */}
                     {cols.map((col) =>
                       <td className='border' key={col.id}>
-                        {getCell(row, col) && <input {...register(`existing.${getFormIndex(row, col)}.value` as const)}/>}
+                        {getCell(row, col) ? 
+                          <input {...register(`existing.${getFormIndex(row, col)}.value` as const)}/>
+                          : <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
+                        }
                       </td>
                     )}
 
