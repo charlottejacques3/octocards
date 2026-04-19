@@ -12,26 +12,25 @@ interface Props {
 
 const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
 
-  const rows = headers.rows;
-  const cols = headers.cols;
-
+  const [rows, setRows] = useState<TableHeader[]>(headers.rows);
+  const [cols, setCols] = useState<TableHeader[]>(headers.cols);
   const [addedRowIndexes, setAddedRowIndexes] = useState<number[]>([]);
   const [addedColIndexes, setAddedColIndexes] = useState<number[]>([]);
-  const [nextRowIndex, setNextRowIndex] = useState<number>(rows[rows.length-1].index+1);
-  const [nextColIndex, setNextColIndex] = useState<number>(cols[cols.length-1].index+1);
+  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1].index+1);
+  const [nextColIndex, setNextColIndex] = useState<number>(headers.cols[headers.cols.length-1].index+1);
 
   const getCell = (row:TableHeader, col:TableHeader) => {
     return cells[`${row.id}-${col.id}`];
   }
 
   const [cellDefaultVals, emptyCells] = useMemo(() => {
-    const vals:{value: string, id: number}[] = [];
+    const vals:{value: string, dataId: number}[] = [];
     const empties:{value: string, rowIndex: number, colIndex: number}[] = [];
-    rows.forEach((row) => {
-      cols.forEach((col) => {
+    headers.rows.forEach((row) => {
+      headers.cols.forEach((col) => {
         const cell = getCell(row, col);
         if (cell) {
-          vals.push({ value: cell.text, id: cell.id });
+          vals.push({ value: cell.text, dataId: cell.id });
         } else {
           empties.push({ value: '', rowIndex: row.index, colIndex: col.index })
         }
@@ -40,15 +39,15 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     return [vals, empties];
   }, []);
 
-  const headerDefaultVals:{value: string, id: number}[] = (rows.concat(cols)).map((row) => ({value: row.text, id: row.id}));
+  const headerDefaultVals:{value: string, dataId: number}[] = (headers.rows.concat(headers.cols)).map((header) => ({value: header.text, dataId: header.id}));
 
   const getFormIndex = (row?: TableHeader, col?: TableHeader) => {
     if (row && col) {
       const currentCell = getCell(row, col);
-      return cellDefaultVals.findIndex(cell => cell.id === currentCell.id);
+      return existingFields.findIndex(cell => cell.dataId === currentCell.id);
     } 
     const currentCellId = row ? row.id : col ? col.id : -1;
-    return headerDefaultVals.findIndex(cell => cell.id === currentCellId);
+    return existingHeaderFields.findIndex(cell => cell.dataId === currentCellId);
   }
 
   const getFormIndexFromNew = (rowId: number, colId: number) => {
@@ -58,11 +57,11 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   type FormValues = {
     existing: {
       value: string;
-      id: number;
+      dataId: number;
     }[];
     existingHeaders: {
       value: string;
-      id: number;
+      dataId: number;
     }[];
     new: {
       value: string;
@@ -87,7 +86,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     } 
   });
 
-  useFieldArray({
+  const { fields: existingFields } = useFieldArray({
     control,
     name: "existing"
   });
@@ -97,17 +96,17 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     name: "new",
   });
 
-  useFieldArray({
+  const { fields: existingHeaderFields, remove: removeHeaders } = useFieldArray({
     control,
     name: "existingHeaders"
   });
 
-  const { fields: newRowFields, append: appendRows } = useFieldArray({
+  const { fields: newRowFields, append: appendRows, remove: removeNewRow } = useFieldArray({
     control,
     name: "newRows",
   });
 
-  const { fields: newColFields, append: appendCols } = useFieldArray({
+  const { fields: newColFields, append: appendCols, remove: removeNewCol } = useFieldArray({
     control,
     name: "newCols",
   });
@@ -136,6 +135,28 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     setNextColIndex(i => i+1);
   }
 
+  // just remove the header fields, we can check what is missing from the original 
+  // update state to remove the col
+  // all the cells are automatically deleted on the backend
+  const deleteExistingHeader = (rowToRemove?: TableHeader, colToRemove?: TableHeader) => {
+    const index = getFormIndex(rowToRemove, colToRemove);
+    removeHeaders(index);
+    if (rowToRemove) {
+      setRows(rows => rows.filter(row => row.id != rowToRemove.id));
+    } else if (colToRemove) {
+      setCols(cols => cols.filter(col => col.id != colToRemove.id));
+    }
+  }
+
+  // don't send any cells without matching headers to the backend
+  const deleteNewHeader = (indexToRemove: number, row: boolean=true) => {
+    if (row) {
+      removeNewRow(indexToRemove);
+    } else {
+      removeNewCol(indexToRemove);
+    }
+  }
+
   return (
     <div className='w-full h-screen overflow-auto'>
       <h1>Edit {table.name}</h1>
@@ -144,9 +165,25 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
           <div className='flex'>
             <table className='border'>
               <tbody>
+                {/* column delete buttons */}
+                <tr>
+                  <td/>
+                  <td/>
+                  {cols.map((col) =>
+                    <td key={col.id}>
+                      <Button onClick={() => deleteExistingHeader(undefined, col)}>Delete</Button>
+                    </td>
+                  )}
+                  {newColFields.map((col, index) => 
+                    <td key={col.id}>
+                      <Button onClick={() => deleteNewHeader(index, false)}>Delete</Button>
+                    </td>
+                  )}
+                </tr>
 
                 {/* column headers */}
                 <tr>
+                  <td/>
                   <td/>
                   {cols.map((col) =>
                     <th className='border' key={col.id}>
@@ -154,15 +191,20 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     </th>
                   )}
                   {newColFields.map((col, index) => 
-                      <th key={col.id}><input {...register(`newCols.${index}.value` as const)}/></th>
-                    )}
+                    <th key={col.id}><input {...register(`newCols.${index}.value` as const)}/></th>
+                  )}
                 </tr>
 
                 {/* existing rows */}
                 {rows.map((row) =>
-
-                  // row headers
                   <tr key={row.id}>
+
+                    {/* row delete button */}
+                    <td>
+                      <Button onClick={() => deleteExistingHeader(row)}>Delete</Button>
+                    </td>
+
+                    {/* row header */}
                     <th className='border'>
                       <input {...register(`existingHeaders.${getFormIndex(row)}.value` as const)}/>
                     </th>
@@ -189,6 +231,9 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                 {/* added rows */}
                 {newRowFields.map((row, index) => 
                   <tr key={row.id}>
+                    <td>
+                      <Button onClick={() => deleteNewHeader(index)}>Delete</Button>
+                    </td>
                     <th><input {...register(`newRows.${index}.value` as const)}/></th>
                     {cols.map((col) => 
                       <td key={col.id}>
