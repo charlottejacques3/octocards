@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
+import { bulkCreateCells, bulkUpdateCells } from '@/app/api/tables'
 
 interface Props {
   table: Table,
@@ -113,6 +114,8 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
 
   const handleFormSubmit = (data: FieldValues) => {
     console.log(data);
+    bulkUpdateCells(data.existing);
+    bulkCreateCells(data.new, table.id);
   }
 
   const addRow = () => {
