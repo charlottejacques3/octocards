@@ -3,6 +3,7 @@ import { z } from "zod"
 import { TableSchema, TableHeaderSchema, TableItemSchema, TableItem } from "@/lib/definitions"
 import { callAPIServer } from "./callAPIServer"
 import { Rowdies } from "next/font/google"
+import { create } from "domain"
 
 
 export const getTable = async (id: number) => {
@@ -35,8 +36,31 @@ export const getTableCells = async (tableId: number) => {
 }
 
 
+export const bulkUpdateHeaders = async (existingHeaders: {value: string, dataId: number}[]) => {
+  const updateList = existingHeaders.map((cell) => ({id: cell.dataId, text: cell.value}));
+  const res = await callAPIServer('table-headers/bulk-update/', {
+    method: 'PATCH',
+    body: JSON.stringify(updateList),
+  });
+  console.log(await res.json());
+}
+
+
+export const bulkCreateHeaders = async (newRows: {value: string, index: number}[], newCols: {value: string, index: number}[],tableId: number) => {
+  const rows = newRows.map((row) => ({...row, type: 'ROW'}));
+  const cols = newCols.map((col) => ({...col, type: 'COL'}));
+  const updateList = [...rows, ...cols];
+  const res = await callAPIServer(`table-headers/bulk-create/${tableId}/`, {
+    method: 'POST',
+    body: JSON.stringify(updateList),
+  });
+  console.log(await res.json());
+}
+
+
 export const bulkUpdateCells = async (existingCells: {value: string, dataId: number}[]) => {
   const updateList = existingCells.map((cell) => ({id: cell.dataId, text: cell.value}));
+  console.log('update list: ', updateList);
   const res = await callAPIServer('table-items/bulk-update/', {
     method: 'PATCH',
     body: JSON.stringify(updateList),
@@ -46,10 +70,11 @@ export const bulkUpdateCells = async (existingCells: {value: string, dataId: num
 
 
 export const bulkCreateCells = async (newCells: {value: string, rowIndex: number, colIndex: number}[], tableId: number) => {
-  const updateList = newCells.map((cell) => ({text: cell.value, row: cell.rowIndex, col: cell.colIndex}));
+  const createList = newCells.filter((cell) => cell.value).map((cell) => ({text: cell.value, row: cell.rowIndex, col: cell.colIndex}));
+  console.log(createList);
   const res = await callAPIServer(`table-items/bulk-create/${tableId}/`, {
     method: 'POST',
-    body: JSON.stringify(updateList),
+    body: JSON.stringify(createList),
   });
   console.log(await res.json());
 }

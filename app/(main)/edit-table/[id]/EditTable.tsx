@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
-import { bulkCreateCells, bulkUpdateCells } from '@/app/api/tables'
+import { bulkCreateCells, bulkCreateHeaders, bulkUpdateCells, bulkUpdateHeaders } from '@/app/api/tables'
 
 interface Props {
   table: Table,
@@ -17,7 +17,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   const [cols, setCols] = useState<TableHeader[]>(headers.cols);
   const [addedRowIndexes, setAddedRowIndexes] = useState<number[]>([]);
   const [addedColIndexes, setAddedColIndexes] = useState<number[]>([]);
-  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1].index+1);
+  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1].index+1); //need to fix this for size 0!!
   const [nextColIndex, setNextColIndex] = useState<number>(headers.cols[headers.cols.length-1].index+1);
 
   const getCell = (row:TableHeader, col:TableHeader) => {
@@ -70,11 +70,11 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
       colIndex: number;
     }[];
     newRows: {
-      value: string;
+      text: string;
       index: number;
     }[];
     newCols: {
-      value: string;
+      text: string;
       index: number;
     }[];
   };
@@ -112,14 +112,18 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     name: "newCols",
   });
 
-  const handleFormSubmit = (data: FieldValues) => {
+  const handleFormSubmit = async (data: FieldValues) => {
     console.log(data);
-    bulkUpdateCells(data.existing);
-    bulkCreateCells(data.new, table.id);
+    bulkCreateHeaders(data.newRows, data.newCols, table.id);
+    await Promise.all([
+      bulkUpdateHeaders(data.existingHeaders),
+      bulkUpdateCells(data.existing),
+      bulkCreateCells(data.new, table.id)
+    ]);
   }
 
   const addRow = () => {
-    appendRows({ value: '', index: nextRowIndex });
+    appendRows({ text: '', index: nextRowIndex });
     const newCellsInExistingCols = cols.map((col) => ({ value: '', rowIndex: nextRowIndex, colIndex: col.index }));
     const newCellsInNewCols = addedColIndexes.map((col) => ({ value: '', rowIndex: nextRowIndex, colIndex: col }));
     const newCells = [...newCellsInExistingCols, ...newCellsInNewCols];
@@ -129,7 +133,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   }
 
   const addCol = () => {
-    appendCols({ value: '', index: nextColIndex });
+    appendCols({ text: '', index: nextColIndex });
     const newCellsInExistingRows = rows.map((row) => ({ value: '', rowIndex: row.index, colIndex: nextColIndex }));
     const newCellsInNewRows = addedRowIndexes.map((row) => ({ value: '', rowIndex: row, colIndex: nextColIndex }));
     const newCells = [...newCellsInExistingRows, ...newCellsInNewRows];
@@ -194,7 +198,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     </th>
                   )}
                   {newColFields.map((col, index) => 
-                    <th key={col.id}><input {...register(`newCols.${index}.value` as const)}/></th>
+                    <th key={col.id}><input {...register(`newCols.${index}.text` as const)}/></th>
                   )}
                 </tr>
 
@@ -237,7 +241,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     <td>
                       <Button onClick={() => deleteNewHeader(index)}>Delete</Button>
                     </td>
-                    <th><input {...register(`newRows.${index}.value` as const)}/></th>
+                    <th><input {...register(`newRows.${index}.text` as const)}/></th>
                     {cols.map((col) => 
                       <td key={col.id}>
                         <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
