@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
-import { bulkCreateCells, bulkCreateHeaders, bulkUpdateCells, bulkUpdateHeaders } from '@/app/api/tables'
+import { bulkCreateCells, bulkCreateHeaders, bulkDeleteHeaders, bulkUpdateCells, bulkUpdateHeaders } from '@/app/api/tables'
 
 interface Props {
   table: Table,
@@ -118,7 +118,8 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     await Promise.all([
       bulkUpdateHeaders(data.existingHeaders),
       bulkUpdateCells(data.existing),
-      bulkCreateCells(data.new, table.id)
+      bulkCreateCells(data.new, table.id),
+      bulkDeleteHeaders(data.existingHeaders, [...headers.rows, ...headers.cols].map((header) => ({value: header.text, id: header.id})))
     ]);
   }
 

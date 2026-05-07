@@ -4,6 +4,7 @@ import { TableSchema, TableHeaderSchema, TableItemSchema, TableItem } from "@/li
 import { callAPIServer } from "./callAPIServer"
 import { Rowdies } from "next/font/google"
 import { create } from "domain"
+import { headers } from "next/headers"
 
 
 export const getTable = async (id: number) => {
@@ -58,9 +59,19 @@ export const bulkCreateHeaders = async (newRows: {value: string, index: number}[
 }
 
 
+//ONLY CALL METHODS IF THERE IS STUFF TO PASS IN
+export const bulkDeleteHeaders = async (currentHeaders: {value: string, dataId: number}[], previousHeaders: {value: string, id: number}[]) => {
+  const headersToDelete = previousHeaders.filter((prev) => !currentHeaders.some((curr) => curr.dataId === prev.id));
+  console.log(headersToDelete);
+  const res = await callAPIServer(`table-headers/bulk-delete/`, {
+    method: 'DELETE',
+    body: JSON.stringify(headersToDelete),
+  });
+}
+
+
 export const bulkUpdateCells = async (existingCells: {value: string, dataId: number}[]) => {
   const updateList = existingCells.map((cell) => ({id: cell.dataId, text: cell.value}));
-  console.log('update list: ', updateList);
   const res = await callAPIServer('table-items/bulk-update/', {
     method: 'PATCH',
     body: JSON.stringify(updateList),
@@ -69,6 +80,7 @@ export const bulkUpdateCells = async (existingCells: {value: string, dataId: num
 }
 
 
+//ADD FILTER TO CHECK THAT THE HEADER EXISTS!
 export const bulkCreateCells = async (newCells: {value: string, rowIndex: number, colIndex: number}[], tableId: number) => {
   const createList = newCells.filter((cell) => cell.value).map((cell) => ({text: cell.value, row: cell.rowIndex, col: cell.colIndex}));
   console.log(createList);
