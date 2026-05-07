@@ -2,9 +2,8 @@
 import { z } from "zod"
 import { TableSchema, TableHeaderSchema, TableItemSchema, TableItem } from "@/lib/definitions"
 import { callAPIServer } from "./callAPIServer"
-import { Rowdies } from "next/font/google"
-import { create } from "domain"
 import { headers } from "next/headers"
+import { create } from "domain"
 
 
 export const getTable = async (id: number) => {
@@ -32,61 +31,62 @@ export const getTableCells = async (tableId: number) => {
   const TableItemsSchema = z.record(z.string(), TableItemSchema)
   const res = await callAPIServer(`table-items/by-table/${tableId}/`);
   const tableItems = TableItemsSchema.parse(await res.json());
-
   return tableItems;
 }
 
 
 export const bulkUpdateHeaders = async (existingHeaders: {value: string, dataId: number}[]) => {
   const updateList = existingHeaders.map((cell) => ({id: cell.dataId, text: cell.value}));
-  const res = await callAPIServer('table-headers/bulk-update/', {
-    method: 'PATCH',
-    body: JSON.stringify(updateList),
-  });
-  console.log(await res.json());
+  if (updateList.length > 0) { 
+    await callAPIServer('table-headers/bulk-update/', {
+      method: 'PATCH',
+      body: JSON.stringify(updateList),
+    });
+  }
 }
 
 
 export const bulkCreateHeaders = async (newRows: {value: string, index: number}[], newCols: {value: string, index: number}[],tableId: number) => {
   const rows = newRows.map((row) => ({...row, type: 'ROW'}));
   const cols = newCols.map((col) => ({...col, type: 'COL'}));
-  const updateList = [...rows, ...cols];
-  const res = await callAPIServer(`table-headers/bulk-create/${tableId}/`, {
-    method: 'POST',
-    body: JSON.stringify(updateList),
-  });
-  console.log(await res.json());
+  const createList = [...rows, ...cols];
+  if (createList.length > 0) {
+    await callAPIServer(`table-headers/bulk-create/${tableId}/`, {
+      method: 'POST',
+      body: JSON.stringify(createList),
+    });
+  }
 }
 
 
-//ONLY CALL METHODS IF THERE IS STUFF TO PASS IN
 export const bulkDeleteHeaders = async (currentHeaders: {value: string, dataId: number}[], previousHeaders: {value: string, id: number}[]) => {
   const headersToDelete = previousHeaders.filter((prev) => !currentHeaders.some((curr) => curr.dataId === prev.id));
-  console.log(headersToDelete);
-  const res = await callAPIServer(`table-headers/bulk-delete/`, {
-    method: 'DELETE',
-    body: JSON.stringify(headersToDelete),
-  });
+  if (headersToDelete.length > 0) {
+    await callAPIServer(`table-headers/bulk-delete/`, {
+      method: 'DELETE',
+      body: JSON.stringify(headersToDelete),
+    });
+  }
 }
 
 
 export const bulkUpdateCells = async (existingCells: {value: string, dataId: number}[]) => {
   const updateList = existingCells.map((cell) => ({id: cell.dataId, text: cell.value}));
-  const res = await callAPIServer('table-items/bulk-update/', {
-    method: 'PATCH',
-    body: JSON.stringify(updateList),
-  });
-  console.log(await res.json());
+  if (updateList.length > 0) {
+    await callAPIServer('table-items/bulk-update/', {
+      method: 'PATCH',
+      body: JSON.stringify(updateList),
+    });
+  }
 }
 
 
-//ADD FILTER TO CHECK THAT THE HEADER EXISTS!
 export const bulkCreateCells = async (newCells: {value: string, rowIndex: number, colIndex: number}[], tableId: number) => {
   const createList = newCells.filter((cell) => cell.value).map((cell) => ({text: cell.value, row: cell.rowIndex, col: cell.colIndex}));
-  console.log(createList);
-  const res = await callAPIServer(`table-items/bulk-create/${tableId}/`, {
-    method: 'POST',
-    body: JSON.stringify(createList),
-  });
-  console.log(await res.json());
+  if (createList.length > 0) {
+    await callAPIServer(`table-items/bulk-create/${tableId}/`, {
+      method: 'POST',
+      body: JSON.stringify(createList),
+    });
+  }
 }

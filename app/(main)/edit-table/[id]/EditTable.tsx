@@ -114,7 +114,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
 
   const handleFormSubmit = async (data: FieldValues) => {
     console.log(data);
-    bulkCreateHeaders(data.newRows, data.newCols, table.id);
+    await bulkCreateHeaders(data.newRows, data.newCols, table.id);
     await Promise.all([
       bulkUpdateHeaders(data.existingHeaders),
       bulkUpdateCells(data.existing),
