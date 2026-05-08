@@ -1,14 +1,13 @@
 'use client'
 import React, { useState, useMemo } from 'react'
-import Image from 'next/image'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
 import styled from 'styled-components'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
 import DeleteButton from './DeleteButton'
 import { bulkCreateCells, bulkCreateHeaders, bulkDeleteHeaders, bulkUpdateCells, bulkUpdateHeaders } from '@/app/api/tables'
-import deleteButton from '../../../../public/delete.png';
-import deleteButtonHover from '../../../../public/delete_hover.png';
+import { Erica_One } from 'next/font/google'
+import { error } from 'console'
 
 interface Props {
   table: Table,
@@ -32,7 +31,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   const [cols, setCols] = useState<TableHeader[]>(headers.cols);
   const [addedRowIndexes, setAddedRowIndexes] = useState<number[]>([]);
   const [addedColIndexes, setAddedColIndexes] = useState<number[]>([]);
-  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1].index+1); //need to fix this for size 0!!
+  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1].index+1); //need to fix this for size 0!! actually should always have at least 1 row and col so maybe not
   const [nextColIndex, setNextColIndex] = useState<number>(headers.cols[headers.cols.length-1].index+1);
 
   const getCell = (row:TableHeader, col:TableHeader) => {
@@ -94,7 +93,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     }[];
   };
 
-  const { register, control, handleSubmit, reset, trigger, setError } = useForm<FormValues>({
+  const { register, control, handleSubmit, setError, formState: { errors, isValid, isSubmitted }, } = useForm<FormValues>({
     defaultValues: {
       existing: cellDefaultVals,
       existingHeaders: headerDefaultVals,
@@ -114,7 +113,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
 
   const { fields: existingHeaderFields, remove: removeHeaders } = useFieldArray({
     control,
-    name: "existingHeaders"
+    name: "existingHeaders",
   });
 
   const { fields: newRowFields, append: appendRows, remove: removeNewRow } = useFieldArray({
@@ -179,7 +178,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   return (
     <div className='w-full h-screen overflow-auto'>
       <h1>Edit {table.name}</h1>
-      <form onSubmit={handleSubmit(data => handleFormSubmit(data))}>
+      <form onSubmit={handleSubmit(data => handleFormSubmit(data))} autoComplete='off'>
         <StyleWrapper>
           <div className='grid' style={{ gridTemplateColumns: "max-content"}}>
             <div className='flex'>
@@ -191,12 +190,12 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     <td/>
                     {cols.map((col) =>
                       <td key={col.id}>
-                          <DeleteButton onClick={() => deleteExistingHeader(undefined, col)}/>
+                          <DeleteButton onClick={() => deleteExistingHeader(undefined, col)} disabled={cols.length + addedColIndexes.length <= 1}/>
                       </td>
                     )}
                     {newColFields.map((col, index) =>
                       <td key={col.id}>
-                        <DeleteButton onClick={() => deleteNewHeader(index, false)}/>
+                        <DeleteButton onClick={() => deleteNewHeader(index, false)} disabled={cols.length + addedColIndexes.length <= 1}/>
                       </td>
                     )}
                   </tr>
@@ -205,12 +204,14 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     <td/>
                     <td/>
                     {cols.map((col) =>
-                      <th key={col.id}>
-                        <input {...register(`existingHeaders.${getFormIndex(undefined, col)}.value` as const)}/>
+                      <th key={col.id} className={errors.existingHeaders?.[getFormIndex(undefined, col)]?.value && 'border-red-600 bg-red-200'}>
+                        <input {...register(`existingHeaders.${getFormIndex(undefined, col)}.value` as const, { required: true })}/>
                       </th>
                     )}
                     {newColFields.map((col, index) =>
-                      <th key={col.id}><input {...register(`newCols.${index}.text` as const)}/></th>
+                      <th key={col.id} className={errors.newCols?.[index]?.text && 'border-red-600 bg-red-200'}>
+                        <input {...register(`newCols.${index}.text` as const, { required: true })}/>
+                      </th>
                     )}
                   </tr>
                   {/* existing rows */}
@@ -218,10 +219,12 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                     <tr key={row.id}>
                       {/* row delete button */}
                       <td>
-                        <DeleteButton onClick={() => deleteExistingHeader(row)}/>
+                        <DeleteButton onClick={() => deleteExistingHeader(row)} disabled={rows.length + addedRowIndexes.length <= 1}/>
                       </td>
                       {/* row header */}
-                      <th><input {...register(`existingHeaders.${getFormIndex(row)}.value` as const)}/></th>
+                      <th className={errors.existingHeaders?.[getFormIndex(row)]?.value && 'border-red-600 bg-red-200'}>
+                        <input {...register(`existingHeaders.${getFormIndex(row)}.value` as const, { required: true })}/>
+                      </th>
                       {/* cells */}
                       {cols.map((col) =>
                         <td className='border' key={col.id}>
@@ -243,9 +246,11 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
                   {newRowFields.map((row, index) =>
                     <tr key={row.id}>
                       <td>
-                        <DeleteButton onClick={() => deleteNewHeader(index)}/>
+                        <DeleteButton onClick={() => deleteNewHeader(index)} disabled={rows.length + addedRowIndexes.length <=1}/>
                       </td>
-                      <th><input {...register(`newRows.${index}.text` as const)}/></th>
+                      <th className={errors.newRows?.[index]?.text && 'border-red-600 bg-red-200'}>
+                        <input {...register(`newRows.${index}.text` as const, { required: true })}/>
+                      </th>
                       {cols.map((col) =>
                         <td className='border' key={col.id}>
                           <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
@@ -264,8 +269,9 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
             </div>
             <Button onClick={addRow} className='max-w-full mx-6'>+</Button>
           </div>
+          {(!isValid && isSubmitted) && <span className='text-red-600'>Please fill out all table headers.</span>}
         </StyleWrapper>
-        <Button type='submit' className='mt-4'>Done</Button>
+        <Button type='submit' className='mt-4' onClick={() => console.log(errors)}>Done</Button>
       </form>
     </div>
   )

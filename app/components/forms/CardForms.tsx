@@ -64,17 +64,15 @@ export const CardUpdateCreateForm:React.FC<CardUpdateCreateProps> = ({ type, clo
   return (
     <div>
       <h4>{type==FormTypeEnum.EDIT ? 'Edit' : 'Add'} card</h4>
-      <form onSubmit={handleSubmit((data) => handleFormSubmit(data))}>
+      <form onSubmit={handleSubmit((data) => handleFormSubmit(data))} autoComplete='off'>
         <input 
           {...register('q', { required: true })} 
-          autoComplete='off' 
           placeholder='Question' 
           defaultValue={defaultQ}
         />
         {errors.q && <div className='text-red-600'>Please enter a question</div>}
         <textarea 
           {...register('a', { required: true })} 
-          autoComplete='off' 
           placeholder='Answer' 
           defaultValue={defaultA}
           className='h-24'

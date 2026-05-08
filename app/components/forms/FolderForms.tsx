@@ -60,8 +60,8 @@ export const FolderUpdateCreateForm:React.FC<FolderUpdateCreateProps> = ({ type,
   return (
     <div>
       <h4>{type==FormTypeEnum.EDIT ? 'Edit' : 'Add'} Folder</h4>
-      <form onSubmit={handleSubmit((data) => handleFormSubmit(data))}>
-        <input {...register('newName', { required: true })} autoComplete='off' placeholder='New folder name' defaultValue={defaultVal}/>
+      <form onSubmit={handleSubmit((data) => handleFormSubmit(data))} autoComplete='off'>
+        <input {...register('newName', { required: true })} placeholder='New folder name' defaultValue={defaultVal}/>
         {errors.newName && <div className='text-red-600'>Please fill out this field</div>}
         <div className='flex mt-3'>
           <Button onClick={onClose} priority='secondary' className='w-full mr-1'>Cancel</Button>
