@@ -2,8 +2,6 @@
 import { z } from "zod"
 import { TableSchema, TableHeaderSchema, TableItemSchema, TableItem } from "@/lib/definitions"
 import { callAPIServer } from "./callAPIServer"
-import { headers } from "next/headers"
-import { create } from "domain"
 
 
 export const getTable = async (id: number) => {
@@ -46,7 +44,7 @@ export const bulkUpdateHeaders = async (existingHeaders: {value: string, dataId:
 }
 
 
-export const bulkCreateHeaders = async (newRows: {value: string, index: number}[], newCols: {value: string, index: number}[],tableId: number) => {
+export const bulkCreateHeaders = async (newRows: {value: string, index: number}[], newCols: {value: string, index: number}[], tableId: number) => {
   const rows = newRows.map((row) => ({...row, type: 'ROW'}));
   const cols = newCols.map((col) => ({...col, type: 'COL'}));
   const createList = [...rows, ...cols];

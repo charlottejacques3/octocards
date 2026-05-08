@@ -24,6 +24,7 @@ const page = () => {
       <ExternalLink href="https://icons8.com/icon/60636/back">Back</ExternalLink> icon by <ExternalLink href="https://icons8.com">Icons8</ExternalLink><br/>
       <ExternalLink href="https://icons8.com/icon/60671/forward">Forward</ExternalLink> icon by <ExternalLink href="https://icons8.com">Icons8</ExternalLink><br/>
       <ExternalLink href="https://icons8.com/icon/102729/ellipsis">Three dots</ExternalLink> icon by <ExternalLink href="https://icons8.com">Icons8</ExternalLink>
+      <ExternalLink href="https://icons8.com/icon/MHELKlQKXqut/delete">Delete</ExternalLink> icon by <ExternalLink href="https://icons8.com">Icons8</ExternalLink>
     </div>
   )
 }

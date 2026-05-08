@@ -1,15 +1,30 @@
 'use client'
 import React, { useState, useMemo } from 'react'
+import Image from 'next/image'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
+import styled from 'styled-components'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
+import DeleteButton from './DeleteButton'
 import { bulkCreateCells, bulkCreateHeaders, bulkDeleteHeaders, bulkUpdateCells, bulkUpdateHeaders } from '@/app/api/tables'
+import deleteButton from '../../../../public/delete.png';
+import deleteButtonHover from '../../../../public/delete_hover.png';
 
 interface Props {
   table: Table,
   headers: {'rows': TableHeader[], 'cols': TableHeader[]},
   cells: Record<string, TableItem>
 }
+
+const StyleWrapper = styled.div`
+  input {
+    border: none;
+  }
+
+  th {
+    border-width: 1px;
+  }
+`;
 
 const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
 
@@ -143,9 +158,6 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     setNextColIndex(i => i+1);
   }
 
-  // just remove the header fields, we can check what is missing from the original 
-  // update state to remove the col
-  // all the cells are automatically deleted on the backend
   const deleteExistingHeader = (rowToRemove?: TableHeader, colToRemove?: TableHeader) => {
     const index = getFormIndex(rowToRemove, colToRemove);
     removeHeaders(index);
@@ -156,7 +168,6 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     }
   }
 
-  // don't send any cells without matching headers to the backend
   const deleteNewHeader = (indexToRemove: number, row: boolean=true) => {
     if (row) {
       removeNewRow(indexToRemove);
@@ -169,98 +180,91 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     <div className='w-full h-screen overflow-auto'>
       <h1>Edit {table.name}</h1>
       <form onSubmit={handleSubmit(data => handleFormSubmit(data))}>
-        <div>
-          <div className='flex'>
-            <table className='border'>
-              <tbody>
-                {/* column delete buttons */}
-                <tr>
-                  <td/>
-                  <td/>
-                  {cols.map((col) =>
-                    <td key={col.id}>
-                      <Button onClick={() => deleteExistingHeader(undefined, col)}>Delete</Button>
-                    </td>
-                  )}
-                  {newColFields.map((col, index) => 
-                    <td key={col.id}>
-                      <Button onClick={() => deleteNewHeader(index, false)}>Delete</Button>
-                    </td>
-                  )}
-                </tr>
-
-                {/* column headers */}
-                <tr>
-                  <td/>
-                  <td/>
-                  {cols.map((col) =>
-                    <th className='border' key={col.id}>
-                      <input {...register(`existingHeaders.${getFormIndex(undefined, col)}.value` as const)}/>
-                    </th>
-                  )}
-                  {newColFields.map((col, index) => 
-                    <th key={col.id}><input {...register(`newCols.${index}.text` as const)}/></th>
-                  )}
-                </tr>
-
-                {/* existing rows */}
-                {rows.map((row) =>
-                  <tr key={row.id}>
-
-                    {/* row delete button */}
-                    <td>
-                      <Button onClick={() => deleteExistingHeader(row)}>Delete</Button>
-                    </td>
-
-                    {/* row header */}
-                    <th className='border'>
-                      <input {...register(`existingHeaders.${getFormIndex(row)}.value` as const)}/>
-                    </th>
-
-                    {/* cells */}
+        <StyleWrapper>
+          <div className='grid' style={{ gridTemplateColumns: "max-content"}}>
+            <div className='flex'>
+              <table>
+                <tbody>
+                  {/* column delete buttons */}
+                  <tr>
+                    <td/>
+                    <td/>
                     {cols.map((col) =>
-                      <td className='border' key={col.id}>
-                        {getCell(row, col) ? 
-                          <input {...register(`existing.${getFormIndex(row, col)}.value` as const)}/>
-                          : <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
-                        }
+                      <td key={col.id}>
+                          <DeleteButton onClick={() => deleteExistingHeader(undefined, col)}/>
                       </td>
                     )}
-
-                    {/* added cols */}
-                    {newColFields.map((col) => 
+                    {newColFields.map((col, index) =>
                       <td key={col.id}>
-                        <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
+                        <DeleteButton onClick={() => deleteNewHeader(index, false)}/>
                       </td>
                     )}
                   </tr>
-                )}
-
-                {/* added rows */}
-                {newRowFields.map((row, index) => 
-                  <tr key={row.id}>
-                    <td>
-                      <Button onClick={() => deleteNewHeader(index)}>Delete</Button>
-                    </td>
-                    <th><input {...register(`newRows.${index}.text` as const)}/></th>
-                    {cols.map((col) => 
-                      <td key={col.id}>
-                        <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
-                      </td>
+                  {/* column headers */}
+                  <tr>
+                    <td/>
+                    <td/>
+                    {cols.map((col) =>
+                      <th key={col.id}>
+                        <input {...register(`existingHeaders.${getFormIndex(undefined, col)}.value` as const)}/>
+                      </th>
                     )}
-                    {newColFields.map((col) => 
-                      <td key={col.id}>
-                        <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
-                      </td>
+                    {newColFields.map((col, index) =>
+                      <th key={col.id}><input {...register(`newCols.${index}.text` as const)}/></th>
                     )}
                   </tr>
-                )}
-              </tbody>
-            </table>
-            <Button onClick={addCol}>+</Button>
+                  {/* existing rows */}
+                  {rows.map((row) =>
+                    <tr key={row.id}>
+                      {/* row delete button */}
+                      <td>
+                        <DeleteButton onClick={() => deleteExistingHeader(row)}/>
+                      </td>
+                      {/* row header */}
+                      <th><input {...register(`existingHeaders.${getFormIndex(row)}.value` as const)}/></th>
+                      {/* cells */}
+                      {cols.map((col) =>
+                        <td className='border' key={col.id}>
+                          {getCell(row, col) ?
+                            <input {...register(`existing.${getFormIndex(row, col)}.value` as const)}/>
+                            : <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
+                          }
+                        </td>
+                      )}
+                      {/* added cols */}
+                      {newColFields.map((col) =>
+                        <td className='border' key={col.id}>
+                          <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
+                        </td>
+                      )}
+                    </tr>
+                  )}
+                  {/* added rows */}
+                  {newRowFields.map((row, index) =>
+                    <tr key={row.id}>
+                      <td>
+                        <DeleteButton onClick={() => deleteNewHeader(index)}/>
+                      </td>
+                      <th><input {...register(`newRows.${index}.text` as const)}/></th>
+                      {cols.map((col) =>
+                        <td className='border' key={col.id}>
+                          <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
+                        </td>
+                      )}
+                      {newColFields.map((col) =>
+                        <td className='border' key={col.id}>
+                          <input {...register(`new.${getFormIndexFromNew(row.index, col.index)}.value` as const)}/>
+                        </td>
+                      )}
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+              <Button onClick={addCol} className='mt-6 w-6'>+</Button>
+            </div>
+            <Button onClick={addRow} className='max-w-full mx-6'>+</Button>
           </div>
-          <Button onClick={addRow}>+</Button>
-        </div>
+        </StyleWrapper>
         <Button type='submit' className='mt-4'>Done</Button>
       </form>
     </div>
