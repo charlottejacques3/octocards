@@ -1,7 +1,8 @@
 'use server'
-import { z } from "zod"
-import { TableSchema, TableHeaderSchema, TableItemSchema, TableItem } from "@/lib/definitions"
+import { z, ZodError } from "zod"
+import { TableSchema, TableHeaderSchema, TableItemSchema, TableDataSchema } from "@/lib/definitions"
 import { callAPIServer } from "./callAPIServer"
+import { table } from "console"
 
 
 export const getTable = async (id: number) => {
@@ -30,6 +31,14 @@ export const getTableCells = async (tableId: number) => {
   const res = await callAPIServer(`table-items/by-table/${tableId}/`);
   const tableItems = TableItemsSchema.parse(await res.json());
   return tableItems;
+}
+
+
+export const getTableDataByDeck = async (deckId: number) => {
+  const AllTablesSchema = z.array(TableDataSchema);
+  const res = await callAPIServer(`tables/by-deck/${deckId}/`);
+  const tableData = AllTablesSchema.parse(await res.json());
+  return tableData;
 }
 
 

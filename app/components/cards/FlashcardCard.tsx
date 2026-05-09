@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Card from '../Card'
 import Modal from '../Modal'
 import { CardUpdateCreateForm, CardDeleteForm } from '../forms/CardForms'
@@ -12,12 +12,8 @@ interface Props {
 
 const FlashcardCard:React.FC<Props> = ({ card, menuOpen, setMenuOpen }) => {
 
-  const [updateModalOpen, setUpdateModelOpen] = useState<boolean>(false);
-  const [deleteModalOpen, setDeleteModelOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    console.log('card changed', card);
-  }, [card]);
+  const [updateModalOpen, setUpdateModalOpen] = useState<boolean>(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   return (
     <>
@@ -25,20 +21,20 @@ const FlashcardCard:React.FC<Props> = ({ card, menuOpen, setMenuOpen }) => {
         content={card.question} 
         menuOpen={menuOpen} 
         setMenuOpen={setMenuOpen}
-        setUpdateModalOpen={setUpdateModelOpen}
-        setDeleteModalOpen={setDeleteModelOpen}
+        setUpdateModalOpen={setUpdateModalOpen}
+        setDeleteModalOpen={setDeleteModalOpen}
         otherSide={card.answer}
         flashcard
       />
 
       {/* update modal */}
-      <Modal isOpen={updateModalOpen} close={() => setUpdateModelOpen(false)}>
-        <CardUpdateCreateForm type={FormTypeEnum.EDIT} close={() => setUpdateModelOpen(false)} id={card.id} defaultQ={card.question} defaultA={card.answer}/>
+      <Modal isOpen={updateModalOpen} close={() => setUpdateModalOpen(false)}>
+        <CardUpdateCreateForm type={FormTypeEnum.EDIT} close={() => setUpdateModalOpen(false)} id={card.id} defaultQ={card.question} defaultA={card.answer}/>
       </Modal>
 
       {/* delete modal */}
-      <Modal isOpen={deleteModalOpen} close={() => setDeleteModelOpen(false)}>
-        <CardDeleteForm close={() => setDeleteModelOpen(false)} id={card.id}/>
+      <Modal isOpen={deleteModalOpen} close={() => setDeleteModalOpen(false)}>
+        <CardDeleteForm close={() => setDeleteModalOpen(false)} id={card.id}/>
       </Modal>
     </>
   )

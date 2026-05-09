@@ -180,7 +180,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
       <h1>Edit {table.name}</h1>
       <form onSubmit={handleSubmit(data => handleFormSubmit(data))} autoComplete='off'>
         <StyleWrapper>
-          <div className='grid' style={{ gridTemplateColumns: "max-content"}}>
+          <div className='grid' style={{ gridTemplateColumns: 'max-content'}}>
             <div className='flex'>
               <table>
                 <tbody>

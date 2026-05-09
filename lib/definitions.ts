@@ -18,6 +18,11 @@ export enum ObjectEnum {
   CARD = 'Card'
 }
 
+export enum ItemEnum {
+  FLASHCARD = 'Flashcard',
+  TABLE = 'Table'
+}
+
 export const FolderSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -81,3 +86,15 @@ export const TableItemSchema = z.object({
 });
 
 export type TableItem = z.infer<typeof TableItemSchema>;
+
+export const TableDataSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  headers: z.object({
+    rows: z.array(TableHeaderSchema),
+    cols: z.array(TableHeaderSchema)
+  }),
+  items: z.record(z.string(), TableItemSchema)
+});
+
+export type TableData = z.infer<typeof TableDataSchema>;

@@ -1,30 +1,39 @@
 'use client'
 import React, { useState } from 'react'
-import dynamic from 'next/dynamic'
-import { Deck, CardOverview, ObjectEnum } from '@/lib/definitions'
+import { Deck, CardOverview, TableData, ObjectEnum, ItemEnum } from '@/lib/definitions'
 import Button from '@/app/components/Button'
 import CreateCard from '@/app/components/cards/CreateCard'
 import FlashcardCard from '@/app/components/cards/FlashcardCard'
-// import FormTest from './FormTest'
+import Table from './Table'
 
 interface Props {
   deck: Deck
   cards: CardOverview[],
+  tables: TableData[],
   allCount: number,
   dueCount: number
 }
 
-const DeckPage:React.FC<Props> = ({ deck, cards, allCount, dueCount }) => {
+const DeckPage:React.FC<Props> = ({ deck, cards, tables, allCount, dueCount }) => {
   
   const [menuOpenIndex, setMenuOpenIndex] = useState<number>(-1);
+  const [menuOpenObjectType, setMenuOpenObjectType] = useState<ItemEnum | null>(null);
 
-  // const FormTest = dynamic(() => import('./FormTest'), { ssr: false })
+  const closeMenu = () => {
+      setMenuOpenIndex(-1);
+      setMenuOpenObjectType(null);
+    }
+  
+    const openMenu = (id: number, itemType: ItemEnum) => {
+      setMenuOpenIndex(id);
+      setMenuOpenObjectType(itemType);
+    }
 
   return (
     <div className='w-full h-screen overflow-y-auto' onClick={() => setMenuOpenIndex(-1)}>
       <h1>{deck.name}</h1>
       
-      {/* <FormTest/> */}
+      {/* cards */}
       <div className='flex mt-4'>
         <h4>Cards</h4>
         {allCount > 0 && <Button href={`/study/?due=false&deck=${deck.id}`} className='ml-5 mr-3 px-2'>Study All (<span className='font-bold'>{allCount}</span>)</Button>}
@@ -36,11 +45,22 @@ const DeckPage:React.FC<Props> = ({ deck, cards, allCount, dueCount }) => {
           <FlashcardCard
             key={card.id}
             card={card}
-            menuOpen = {menuOpenIndex === card.id}
-            setMenuOpen={(open: boolean) => open ? setMenuOpenIndex(card.id) : setMenuOpenIndex(-1)}
+            menuOpen = {menuOpenIndex === card.id && menuOpenObjectType === ItemEnum.FLASHCARD}
+            setMenuOpen={(open: boolean) => open ? openMenu(card.id, ItemEnum.FLASHCARD) : closeMenu()}
           />
         )}
       </div>
+
+      {/* tables */}
+      <h4 className='mt-4'>Tables</h4>
+      {tables.map((table) => 
+        <Table 
+          key={table.id} 
+          table={table} 
+          menuOpen={menuOpenIndex === table.id && menuOpenObjectType === ItemEnum.TABLE}
+          setMenuOpen={(open: boolean) => open ? openMenu(table.id, ItemEnum.TABLE) : closeMenu()}
+        />
+      )}
     </div>
   )
 }

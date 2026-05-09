@@ -21,7 +21,7 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
   const [menuIconVisible, setMenuIconVisible] = useState<boolean>(false);
   const [cardContent, setCardContent] = useState<string>(content);
 
-  const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover ';
+  const menuItemStyles = 'p-2 cursor-pointer hover:bg-bg-secondary-hover';
 
   useEffect(() => {
     setCardContent(content);
@@ -47,7 +47,6 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
   }
 
   return (
-    <>
     <div 
       className={`bg-bg-secondary rounded-lg mr-4 mt-2 w-64 relative cursor-pointer ${flashcard ? 'h-30 px-2' : 'p-5'}`} 
       onMouseEnter={() => setMenuIconVisible(true)}
@@ -76,9 +75,6 @@ const Card:React.FC<Props> = ({ content, menuOpen, setMenuOpen, setUpdateModalOp
         </div>
       </div>
     </div>
-
-    
-    </>
   )
 }
 

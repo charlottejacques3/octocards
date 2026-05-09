@@ -2,18 +2,17 @@ import React, { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 import { FormTypeEnum } from '@/lib/definitions';
-import { createDeck, updateDeck, deleteDeck } from '@/app/api/decks';
 import Button from '../Button';
 
-interface DeckUpdateCreateProps {
+interface TableRenameCreateProps {
   type: FormTypeEnum,
   close: () => void,
   id?: number,
-  folderId?: number,
+  deckId?: number,
   defaultVal?: string
 }
 
-export const DeckUpdateCreateForm:React.FC<DeckUpdateCreateProps> = ({ type, close, id, folderId, defaultVal='' }) => {
+export const TableRenameCreateForm:React.FC<TableRenameCreateProps> = ({ type, close, id, deckId, defaultVal='' }) => {
 
   const {
     register,
@@ -35,16 +34,16 @@ export const DeckUpdateCreateForm:React.FC<DeckUpdateCreateProps> = ({ type, clo
   const handleFormSubmit = async (data: FieldValues) => {
     if (type === FormTypeEnum.CREATE) {
       try {
-        await createDeck(data.newName, folderId);
+        //create table
       } catch (e) {
-        toast.error('Failed to create deck. Please try again');
+        toast.error('Failed to create table. Please try again');
       }
     }
     else if (type === FormTypeEnum.EDIT && id) {
       try {
-        await updateDeck(id, data.newName);
+        //rename table
       } catch (e) {
-        toast.error('Failed to update deck. Please try again');
+        toast.error('Failed to rename table. Please try again');
       }
     } else {
       toast.error('Error: missing ID');
@@ -60,9 +59,9 @@ export const DeckUpdateCreateForm:React.FC<DeckUpdateCreateProps> = ({ type, clo
 
   return (
     <div>
-      <h4>{type==FormTypeEnum.EDIT ? 'Edit' : 'Add'} deck</h4>
+      <h4>{type==FormTypeEnum.EDIT ? 'Rename' : 'Add'} table</h4>
       <form onSubmit={handleSubmit((data) => handleFormSubmit(data))} autoComplete='off'>
-        <input {...register('newName', { required: true })} placeholder='New deck name' defaultValue={defaultVal}/>
+        <input {...register('newName', { required: true })} placeholder='New table name' defaultValue={defaultVal}/>
         {errors.newName && <div className='text-red-600'>Please fill out this field</div>}
         <div className='flex mt-3'>
           <Button onClick={onClose} priority='secondary' className='w-full mr-1'>Cancel</Button>
@@ -74,25 +73,25 @@ export const DeckUpdateCreateForm:React.FC<DeckUpdateCreateProps> = ({ type, clo
 }
 
 
-interface DeckDeleteProps {
+interface TableDeleteProps {
   close: () => void, 
   id: number
 }
 
-export const DeckDeleteForm:React.FC<DeckDeleteProps> = ({ close, id }) => {
+export const TableDeleteForm:React.FC<TableDeleteProps> = ({ close, id }) => {
 
   const handleDelete = async () => {
     try {
-      await deleteDeck(id);
+      //delete table
     } catch (e) {
-      toast.error('Failed to delete deck. Please try again')
+      toast.error('Failed to delete table. Please try again')
     } 
     close();
   }
 
   return (
     <div>
-      Are you sure you would like to delete this deck? This will delete all cards contained in this deck. This action cannot be undone.
+      Are you sure you would like to delete this table? This action cannot be undone.
         <div className='flex mt-3'>
           <Button onClick={close} priority='secondary' className='w-full mr-1'>Cancel</Button>
           <Button onClick={handleDelete} className='w-full ml-1'>Yes, delete</Button>
