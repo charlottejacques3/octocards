@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { FieldValues, useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 import { FormTypeEnum } from '@/lib/definitions';
+import { createTable, deleteTable, updateTable } from '@/app/api/tables';
 import Button from '../Button';
+import { create } from 'domain';
 
 interface TableRenameCreateProps {
   type: FormTypeEnum,
@@ -32,16 +34,17 @@ export const TableRenameCreateForm:React.FC<TableRenameCreateProps> = ({ type, c
   }, [defaultVal, reset]);
 
   const handleFormSubmit = async (data: FieldValues) => {
-    if (type === FormTypeEnum.CREATE) {
+    console.log('deck', deckId)
+    if (type === FormTypeEnum.CREATE && deckId) {
       try {
-        //create table
+        await createTable(data.newName, deckId);
       } catch (e) {
         toast.error('Failed to create table. Please try again');
       }
     }
     else if (type === FormTypeEnum.EDIT && id) {
       try {
-        //rename table
+        await updateTable(id, data.newName);
       } catch (e) {
         toast.error('Failed to rename table. Please try again');
       }
@@ -59,7 +62,7 @@ export const TableRenameCreateForm:React.FC<TableRenameCreateProps> = ({ type, c
 
   return (
     <div>
-      <h4>{type==FormTypeEnum.EDIT ? 'Rename' : 'Add'} table</h4>
+      <h4>{type==FormTypeEnum.EDIT ? 'Rename' : 'Create'} table</h4>
       <form onSubmit={handleSubmit((data) => handleFormSubmit(data))} autoComplete='off'>
         <input {...register('newName', { required: true })} placeholder='New table name' defaultValue={defaultVal}/>
         {errors.newName && <div className='text-red-600'>Please fill out this field</div>}
@@ -82,7 +85,7 @@ export const TableDeleteForm:React.FC<TableDeleteProps> = ({ close, id }) => {
 
   const handleDelete = async () => {
     try {
-      //delete table
+      await deleteTable(id);
     } catch (e) {
       toast.error('Failed to delete table. Please try again')
     } 

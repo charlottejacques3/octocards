@@ -1,14 +1,51 @@
 'use server'
-import { z, ZodError } from "zod"
+import { revalidatePath } from "next/cache"
+import { redirect } from "next/navigation"
+import { z } from "zod"
 import { TableSchema, TableHeaderSchema, TableItemSchema, TableDataSchema } from "@/lib/definitions"
 import { callAPIServer } from "./callAPIServer"
-import { table } from "console"
 
 
 export const getTable = async (id: number) => {
   const res = await callAPIServer(`tables/${id}`);
   const table = TableSchema.parse(await res.json());
   return table;
+}
+
+
+export const createTable = async (newName: string, deckId: number) => {
+  const { name, deck } = TableSchema.omit({ id: true}).parse({
+    name: newName,
+    deck: deckId
+  });
+  const res = await callAPIServer(`tables/`, {
+    method: 'POST',
+    body: JSON.stringify({name, deck}),
+  });
+  const id = (await res.json()).id;
+  redirect(`/edit-table/${id}`);
+}
+
+
+export const updateTable = async (idNum: number, newName: string) => {
+  const { id, name } = TableSchema.omit({ deck: true}).parse({
+    id: idNum,
+    name: newName
+  });
+  const res = await callAPIServer(`tables/${id}/`, {
+    method: 'PATCH',
+    body: JSON.stringify({name}),
+  });
+  revalidatePath('/');
+  return await res.json();
+}
+
+
+export const deleteTable = async (id: number) => {
+  await callAPIServer(`tables/${id}/`, {
+    method: 'DELETE',
+  });
+  revalidatePath('/');
 }
 
 

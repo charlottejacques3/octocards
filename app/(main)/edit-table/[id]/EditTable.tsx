@@ -1,13 +1,12 @@
 'use client'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
 import styled from 'styled-components'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
 import DeleteButton from './DeleteButton'
 import { bulkCreateCells, bulkCreateHeaders, bulkDeleteHeaders, bulkUpdateCells, bulkUpdateHeaders } from '@/app/api/tables'
-import { Erica_One } from 'next/font/google'
-import { error } from 'console'
 
 interface Props {
   table: Table,
@@ -27,12 +26,13 @@ const StyleWrapper = styled.div`
 
 const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
 
+  const router = useRouter();
   const [rows, setRows] = useState<TableHeader[]>(headers.rows);
   const [cols, setCols] = useState<TableHeader[]>(headers.cols);
   const [addedRowIndexes, setAddedRowIndexes] = useState<number[]>([]);
   const [addedColIndexes, setAddedColIndexes] = useState<number[]>([]);
-  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1].index+1); //need to fix this for size 0!! actually should always have at least 1 row and col so maybe not
-  const [nextColIndex, setNextColIndex] = useState<number>(headers.cols[headers.cols.length-1].index+1);
+  const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1]?.index+1 || 1);
+  const [nextColIndex, setNextColIndex] = useState<number>(headers.cols[headers.cols.length-1]?.index+1 || 1);
 
   const getCell = (row:TableHeader, col:TableHeader) => {
     return cells[`${row.id}-${col.id}`];
@@ -93,7 +93,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     }[];
   };
 
-  const { register, control, handleSubmit, setError, formState: { errors, isValid, isSubmitted }, } = useForm<FormValues>({
+  const { register, control, handleSubmit, formState: { errors, isValid, isSubmitted }, } = useForm<FormValues>({
     defaultValues: {
       existing: cellDefaultVals,
       existingHeaders: headerDefaultVals,
@@ -106,7 +106,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     name: "existing"
   });
 
-  const { fields: newFields, append: appendFields } = useFieldArray({
+  const { fields: newFields, append: appendFields, remove: removeNewFields } = useFieldArray({
     control,
     name: "new",
   });
@@ -126,8 +126,19 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     name: "newCols",
   });
 
+  useEffect(() => {
+    removeNewFields();
+    removeNewRow();
+    removeNewCol();
+    if (headers.rows.length === 0) {
+      addRow();
+    }
+    if (headers.cols.length === 0) {
+      addCol();
+    }
+  }, []);
+
   const handleFormSubmit = async (data: FieldValues) => {
-    console.log(data);
     await bulkCreateHeaders(data.newRows, data.newCols, table.id);
     await Promise.all([
       bulkUpdateHeaders(data.existingHeaders),
@@ -135,6 +146,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
       bulkCreateCells(data.new, table.id),
       bulkDeleteHeaders(data.existingHeaders, [...headers.rows, ...headers.cols].map((header) => ({value: header.text, id: header.id})))
     ]);
+    router.push(`/decks/${table.deck}`);
   }
 
   const addRow = () => {
@@ -271,7 +283,8 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
           </div>
           {(!isValid && isSubmitted) && <span className='text-red-600'>Please fill out all table headers.</span>}
         </StyleWrapper>
-        <Button type='submit' className='mt-4' onClick={() => console.log(errors)}>Done</Button>
+        <Button priority='secondary' href={`/decks/${table.deck}/`} className='ml-6 mr-3 px-3'>Cancel</Button>
+        <Button type='submit' className='mt-4 px-3'>Done</Button>
       </form>
     </div>
   )

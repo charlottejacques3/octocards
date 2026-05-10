@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { TableData, FormTypeEnum } from '@/lib/definitions'
@@ -14,6 +15,7 @@ interface Props {
 
 const Table:React.FC<Props> = ({ table, menuOpen, setMenuOpen }) => {
 
+  const router = useRouter();
   const [menuIconVisible, setMenuIconVisible] = useState<boolean>(false);const [renameModalOpen, setRenameModalOpen] = useState<boolean>(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   
@@ -43,9 +45,7 @@ const Table:React.FC<Props> = ({ table, menuOpen, setMenuOpen }) => {
           onClick={(e) => {e.stopPropagation(); setMenuOpen(false)}}
         >
           <div className={`${menuItemStyles} border-b border-b-text-secondary rounded-t-lg`} onClick={() => setRenameModalOpen(true)}>Rename</div>
-          <div className={`${menuItemStyles} border-b border-b-text-secondary`}>
-            <Link href={`/edit-table/${table.id}/`}>Edit</Link>
-          </div>
+          <div className={`${menuItemStyles} border-b border-b-text-secondary`} onClick={() => router.push(`/edit-table/${table.id}/`)}>Edit</div>
           <div className={`${menuItemStyles} rounded-b-lg`} onClick={() => setDeleteModalOpen(true)}>Delete</div>
         </div>
 
