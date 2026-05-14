@@ -1,13 +1,12 @@
 'use server'
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { z } from "zod"
 import { TableSchema, TableHeaderSchema, TableItemSchema, TableDataSchema } from "@/lib/definitions"
 import { callAPIServer } from "./callAPIServer"
 
 
 export const getTable = async (id: number) => {
-  const res = await callAPIServer(`tables/${id}`);
+  const res = await callAPIServer(`tables/${id}/`);
   const table = TableSchema.parse(await res.json());
   return table;
 }
@@ -22,8 +21,7 @@ export const createTable = async (newName: string, deckId: number) => {
     method: 'POST',
     body: JSON.stringify({name, deck}),
   });
-  const id = (await res.json()).id;
-  redirect(`/edit-table/${id}`);
+  return (await res.json()).id;
 }
 
 

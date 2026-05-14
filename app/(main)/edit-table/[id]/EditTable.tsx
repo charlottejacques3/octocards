@@ -3,6 +3,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, useFieldArray, FieldValues } from 'react-hook-form'
 import styled from 'styled-components'
+import { toast } from 'sonner'
 import { Table, TableHeader, TableItem } from '@/lib/definitions'
 import Button from '@/app/components/Button'
 import DeleteButton from './DeleteButton'
@@ -127,26 +128,31 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   });
 
   useEffect(() => {
-    removeNewFields();
-    removeNewRow();
-    removeNewCol();
     if (headers.rows.length === 0) {
+      removeNewFields();
+      removeNewRow();
       addRow();
     }
     if (headers.cols.length === 0) {
+      removeNewFields();
+      removeNewCol();
       addCol();
     }
   }, []);
 
   const handleFormSubmit = async (data: FieldValues) => {
-    await bulkCreateHeaders(data.newRows, data.newCols, table.id);
-    await Promise.all([
-      bulkUpdateHeaders(data.existingHeaders),
-      bulkUpdateCells(data.existing),
-      bulkCreateCells(data.new, table.id),
-      bulkDeleteHeaders(data.existingHeaders, [...headers.rows, ...headers.cols].map((header) => ({value: header.text, id: header.id})))
-    ]);
-    router.push(`/decks/${table.deck}`);
+    try {
+      await bulkCreateHeaders(data.newRows, data.newCols, table.id);
+      await Promise.all([
+        bulkUpdateHeaders(data.existingHeaders),
+        bulkUpdateCells(data.existing),
+        bulkCreateCells(data.new, table.id),
+        bulkDeleteHeaders(data.existingHeaders, [...headers.rows, ...headers.cols].map((header) => ({value: header.text, id: header.id})))
+      ]);
+      router.push(`/decks/${table.deck}`);
+    } catch (e) {
+      toast.error('Failed to save table. Please try again.')
+    }
   }
 
   const addRow = () => {

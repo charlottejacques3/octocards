@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { FieldValues, useForm } from 'react-hook-form'
 import { toast } from 'sonner';
 import { FormTypeEnum } from '@/lib/definitions';
 import { createTable, deleteTable, updateTable } from '@/app/api/tables';
 import Button from '../Button';
-import { create } from 'domain';
 
 interface TableRenameCreateProps {
   type: FormTypeEnum,
@@ -15,6 +15,8 @@ interface TableRenameCreateProps {
 }
 
 export const TableRenameCreateForm:React.FC<TableRenameCreateProps> = ({ type, close, id, deckId, defaultVal='' }) => {
+
+  const router = useRouter();
 
   const {
     register,
@@ -37,10 +39,11 @@ export const TableRenameCreateForm:React.FC<TableRenameCreateProps> = ({ type, c
     console.log('deck', deckId)
     if (type === FormTypeEnum.CREATE && deckId) {
       try {
-        await createTable(data.newName, deckId);
+        const id = await createTable(data.newName, deckId);
+        router.push(`/edit-table/${id}`)
       } catch (e) {
         toast.error('Failed to create table. Please try again');
-      }
+      } 
     }
     else if (type === FormTypeEnum.EDIT && id) {
       try {
