@@ -98,3 +98,20 @@ export const TableDataSchema = z.object({
 });
 
 export type TableData = z.infer<typeof TableDataSchema>;
+
+const TableDetailsSchema = z.object({
+  id: z.number(),
+  text: z.string(),
+  table: z.string(),
+  row: z.string(),
+  col: z.string(),
+});
+
+export type TableDetails = z.infer<typeof TableDetailsSchema>;
+
+export const ItemsDueSchema = z.object({ 
+  cards: z.array(CardOverviewSchema),
+  tables: z.array(TableDetailsSchema)
+});
+
+export type ItemsDue = z.infer<typeof ItemsDueSchema>;

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { parseUrlParams } from "../helpers";
-import { getCardsToStudy } from "../cards";
+import { getCardsToStudy } from "../studying";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);

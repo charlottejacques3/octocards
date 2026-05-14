@@ -1,27 +1,32 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { toast } from 'sonner'
-import { CardOverview } from '@/lib/definitions'
+import { ItemsDue, CardOverview, TableDetails } from '@/lib/definitions'
 import { studyCard } from '@/app/api/cards'
 import Button from '@/app/components/Button'
 
 interface Props {
-  cards: CardOverview[],
+  items: ItemsDue,
   due: boolean,
   category?: string,
   categoryId?: number
 }
 
-const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
+const isCardOverview = (item: CardOverview | TableDetails): item is CardOverview => {
+  return 'question' in item && 'answer' in item;
+}
 
-  const [cardsToStudy, setCardsToStudy] = useState<CardOverview[]>([]);
+const StudyPage:React.FC<Props> = ({ items, due, category, categoryId }) => {
+
+  const [cardsToStudy, setCardsToStudy] = useState<(CardOverview|TableDetails)[]>([]);
   const [activeCardIndex, setActiveCardIndex] = useState<number>(-1);
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
-  const [activeCard, setActiveCard] = useState<CardOverview|undefined>(undefined);
+  const [activeCard, setActiveCard] = useState<CardOverview|TableDetails|undefined>(undefined);
+
+  const cellStyles = 'border p-1';
 
   useEffect(() => {
-    setCardsToStudy(cards);
-    console.log(`/${category ? (category + 's/' + categoryId) : ''}`);
+    setCardsToStudy([...items.cards, ...items.tables]);
   }, []);
 
   useEffect(() => {
@@ -39,6 +44,7 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
   }, [activeCardIndex]);
 
   const updateCardStudyAll = (next: boolean) => {
+    setShowAnswer(false);
     if (next) {
       if (activeCardIndex >= cardsToStudy.length-1) setActiveCard(undefined);
       else setActiveCardIndex(i => i+1);
@@ -72,10 +78,11 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
       const url = `api/to-study/?due=${due}${(category && categoryId) ? `&${category}=${categoryId}` : ''}`
       const res = await fetch(url);
       const data = await res.json();
-      if (data.length > 0) {
+      console.log(data);
+      if (data.cards.length > 0 || data.tables.length) {
         toast.success("Nice job! Let's re-review the questions you got wrong.");
       }
-      setCardsToStudy(data);
+      setCardsToStudy([...data.cards, ...data.tables]);
     } catch (e) {
       toast.error('Something went wrong fetching cards. Please try again.');
     }
@@ -88,13 +95,36 @@ const StudyPage:React.FC<Props> = ({ cards, due, category, categoryId }) => {
           <h1>Study {due ? 'Due' : 'All'}</h1>
           <div className='w-full h-full pl-12 pr-24 py-12'>
 
-            {/* card */}
-            <div 
-              className='w-full h-3/4 bg-bg-secondary hover:bg-bg-secondary-hover rounded-lg flex justify-center items-center cursor-pointer'
-              onClick={() => setShowAnswer(ans => !ans)}
-            >
-              <h1>{showAnswer ? activeCard.answer : activeCard.question}</h1>
-            </div>
+            {isCardOverview(activeCard) ?
+              //card
+              <div 
+                className='w-full h-3/4 bg-bg-secondary hover:bg-bg-secondary-hover rounded-lg flex justify-center items-center cursor-pointer'
+                onClick={() => setShowAnswer(ans => !ans)}
+              >
+                <h1>{showAnswer ? activeCard.answer : activeCard.question}</h1>
+              </div>
+            : //table
+              <div className='w-full text-base'>
+                <h4>{activeCard.table}</h4>
+                <table className='w-full table-fixed'>
+                  <tbody>
+                    <tr>
+                      <td className='w-1/3'/>
+                      <th className={cellStyles}>{activeCard.col}</th>
+                    </tr>
+                    <tr>
+                      <th className={`w-2/3 ${cellStyles}`}>{activeCard.row}</th>
+                      <td className={cellStyles}>
+                      <div>{showAnswer && activeCard.text}</div>
+                      <Button priority='underline' onClick={() => setShowAnswer(prev => !prev)}>
+                        {showAnswer ? 'Hide': 'Reveal'}
+                      </Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            }
 
             <div className='flex flex-col md:flex-row mt-5'>
               {due ?
