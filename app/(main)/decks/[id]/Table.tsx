@@ -58,7 +58,7 @@ const Table:React.FC<Props> = ({ table, menuOpen, setMenuOpen }) => {
             onClick={(e) => {e.stopPropagation(); setMenuOpen(!menuOpen)}}
           />
         </div>
-        <table>
+        <table className='overflow-x-auto'>
           <tbody>
             {/* column headers */}
             <tr>

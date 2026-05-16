@@ -7,6 +7,7 @@ import Button from './Button'
 interface Props {
   type: AuthEnum,
   action: (data: FieldValues) => void,
+  submitting: boolean
   error?: string
 }
 
@@ -16,7 +17,7 @@ type Inputs = {
   password: string
 }
 
-const LoginSignup:React.FC<Props> = ({ type, action, error='' }) => {
+const LoginSignup:React.FC<Props> = ({ type, action, submitting, error='' }) => {
 
   const {
     register,
@@ -39,6 +40,7 @@ const LoginSignup:React.FC<Props> = ({ type, action, error='' }) => {
           <input {...register('password', { required: true, minLength: 6 })} type='password' placeholder='Password'/>
           {errors.password && <span className='text-red-600'>Please enter a passcode of at least 6 characters in length</span>}
           <Button className='w-full mt-3 mb-5' type='submit'><h4>{type}</h4></Button>
+          {submitting && <div>Signing in...</div>}
         </form>
         <p className='text-xs'>
           {type === AuthEnum.LOGIN ?

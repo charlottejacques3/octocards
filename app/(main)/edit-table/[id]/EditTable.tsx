@@ -34,6 +34,7 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   const [addedColIndexes, setAddedColIndexes] = useState<number[]>([]);
   const [nextRowIndex, setNextRowIndex] = useState<number>(headers.rows[headers.rows.length-1]?.index+1 || 1);
   const [nextColIndex, setNextColIndex] = useState<number>(headers.cols[headers.cols.length-1]?.index+1 || 1);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const getCell = (row:TableHeader, col:TableHeader) => {
     return cells[`${row.id}-${col.id}`];
@@ -131,16 +132,19 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
     if (headers.rows.length === 0) {
       removeNewFields();
       removeNewRow();
-      addRow();
-    }
-    if (headers.cols.length === 0) {
-      removeNewFields();
       removeNewCol();
-      addCol();
+      appendRows({ text: '', index: nextRowIndex });
+      appendCols({ text: '', index: nextColIndex });
+      appendFields({ value: '', rowIndex: nextRowIndex, colIndex: nextColIndex });
+      setAddedRowIndexes([nextColIndex]);
+      setNextRowIndex(i => i+1);
+      setAddedColIndexes([nextColIndex]);
+      setNextColIndex(i => i+1);
     }
   }, []);
 
   const handleFormSubmit = async (data: FieldValues) => {
+    setIsSubmitting(true);
     try {
       await bulkCreateHeaders(data.newRows, data.newCols, table.id);
       await Promise.all([
@@ -152,6 +156,8 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
       router.push(`/decks/${table.deck}`);
     } catch (e) {
       toast.error('Failed to save table. Please try again.')
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -194,11 +200,11 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
   }
 
   return (
-    <div className='w-full h-screen overflow-auto'>
+    <div className='max-w-full h-screen overflow-auto'>
       <h1>Edit {table.name}</h1>
       <form onSubmit={handleSubmit(data => handleFormSubmit(data))} autoComplete='off'>
         <StyleWrapper>
-          <div className='grid' style={{ gridTemplateColumns: 'max-content'}}>
+          <div className='grid mr-3 overflow-x-auto' style={{ gridTemplateColumns: 'max-content'}}>
             <div className='flex'>
               <table>
                 <tbody>
@@ -289,8 +295,9 @@ const EditTable:React.FC<Props> = ({ table, headers, cells }) => {
           </div>
           {(!isValid && isSubmitted) && <span className='text-red-600'>Please fill out all table headers.</span>}
         </StyleWrapper>
-        <Button priority='secondary' href={`/decks/${table.deck}/`} className='ml-6 mr-3 px-3'>Cancel</Button>
-        <Button type='submit' className='mt-4 px-3'>Done</Button>
+        <Button priority='secondary' href={`/decks/${table.deck}/`} className='ml-6 mr-3 px-3' blocked={isSubmitting}>Cancel</Button>
+        <Button type='submit' className='mt-4 px-3' blocked={isSubmitting}>Done</Button>
+        {isSubmitting && <div className='ml-6'>Saving...</div>}
       </form>
     </div>
   )

@@ -10,19 +10,23 @@ const page = () => {
 
   const router = useRouter();
   const [error, setError] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleLogin = async (data: FieldValues) => {
+    setIsSubmitting(true);
     try {
       await login(data.username, data.password);
       router.push('/');
     } catch (e) {
       const err = e as Error;
       setError(err.message);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
   return (
-    <LoginSignup type={AuthEnum.LOGIN} action={handleLogin} error={error}/>
+    <LoginSignup type={AuthEnum.LOGIN} action={handleLogin} submitting={isSubmitting} error={error}/>
   )
 }
 
